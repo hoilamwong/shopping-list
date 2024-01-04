@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FaTrash } from "react-icons/fa";
 import AddItem from './AddItem';
+import AddItem2 from './AddItem2';
 
 function ShoppingList() {
 	const [items, setItems] = useState(JSON.parse(localStorage.getItem('shopping-list')) || [])
@@ -83,15 +84,16 @@ function ShoppingList() {
 			{/* Items Table */}
 			<div className='relative overflow-x-auto shadow-md rounded-lg'>
 				<table className='w-full text-left table-fixed'>
-					<thead className='uppercase bg-gray-100/20 text-white/80'>
+					{/* Table Head */}
+					<thead className='uppercase bg-gray-100/20 text-white/80 text-sm'>
 						<tr>
-							<th scope="col" className="p-4">
-								<div className="flex items-center">
-									<input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-900 border-gray-300 rounded focus:ring-blue-500" />
+							<th scope="col" className="p-2 w-16">
+								<div className="flex items-center justify-center">
+									<input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500" />
 									<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 								</div>
 							</th>
-							<th> Item </th>
+							<th scope="col" className="w-3/6"> Item </th>
 							<th > Quantity </th>
 							<th >
 								<div className='flex items-center'>
@@ -114,17 +116,25 @@ function ShoppingList() {
 							</th>
 						</tr>
 					</thead>
+
+					{/* Table Body */}
 					<tbody>
+						<AddItem2
+							newItem={newItem}
+							handleAdd={handleAdd}
+							handleAddFormChange={handleAddFormChange}
+						/>
 						{items.map((item) => (
 							<tr key={item.id} className='bg-gray-100/5 hover:bg-gray-100/10 border-b border-white/10' >
 								{/* Check */}
 								<td className='flex items-center justify-center p-2'>
-									<input
-										type='checkbox'
-										onChange={() => handleCheck(item.id)}
-										checked={item.checked}
-										className='w-6 h-6 m-auto p-auto'
-									/>
+									<div className="flex items-center justify-center">
+										<input id="checkbox-item" type="checkbox" 
+											className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500"
+											onChange={() => handleCheck(item.id)} 
+										/>
+										<label htmlFor="checkbox-item" className="sr-only">checkbox</label>
+									</div>
 								</td>
 								{/* Item Name */}
 								<td
@@ -139,7 +149,7 @@ function ShoppingList() {
 									{/* Expandable */}
 									{expandItems.includes(item.id) ?
 										<div>
-											item.description
+											{item.description}
 										</div>
 										: null}
 								</td>
@@ -149,11 +159,11 @@ function ShoppingList() {
 								</td>
 								{/* Item Price */}
 								<td>
-									${item.price}
+									$ <span className='ml-1 mr-1'> {item.price} </span>
 								</td>
 								{/* Item Total */}
 								<td>
-									${item.price * item.quantity}
+									$ <span className='ml-1 mr-1'> {item.price * item.quantity} </span>
 								</td>
 								{/* Actions */}
 								<td>
@@ -175,7 +185,7 @@ function ShoppingList() {
 							<th></th>
 							<th></th>
 							<th>Total</th>
-							<th>${totalPrice} </th>
+							<th>$ <span className='ml-1 mr-1'> {totalPrice} </span> </th>
 						</tr>
 					</tfoot>
 				</table>

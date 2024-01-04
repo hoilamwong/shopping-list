@@ -22,3 +22,7 @@ html {
   height: 100vh;
   color: white;
 }
+
+input {
+  padding: 0%;
+}
