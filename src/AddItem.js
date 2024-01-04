@@ -3,7 +3,7 @@ import React from 'react'
 function AddItem({ handleAdd, handleAddFormChange }) {
 
 	return (
-		<form className='addForm' onSubmit={handleAdd}>
+		<form className='addForm text-black' onSubmit={handleAdd}>
 			<input
 				autoFocus
 				type='text'
