@@ -1,21 +1,23 @@
 ## Shopping List
 
-Personal Project. Inspired by Dave Gray's React JS Tutorial
+A simple shopping list , compatible with mobile :)
+https://hoilamwong-shopping-list-v0.vercel.app/
 
-## Todo 1/3/2024:
+Created using ReactJs, TailwindCss
+
+## Features:
+- Add new item to a shopping list
+- Save item information such as item name (required), price (default: $0), quantity (default: 1), and description.
+- Display Total Cost of all items in the list
+- Compatible with Mobile 
+  - (add item not compatible yet)
+
+
+## Upcoming Features:
 - Connect to JSON server
 - Styling using tailwindcss
 - Include Search function
 
 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and inspired by Dave Gray's React JS Tutorial.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
