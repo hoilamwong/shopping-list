@@ -103,18 +103,22 @@ function ShoppingList() {
 	}
 
 	return (
-		<div className='m-2 p-2 relative overflow-x-auto'>
+		<div className='ml-5 mr-5 p-2 relative overflow-x-auto'>
+			
+			<div className='uppercase text-xl text-left font-bold text-gray-300/60 mt-4 mb-2 tracking-widest'>
+				shopping list
+			</div>
 
 			{/* Items Table */}
-			<div className='relative overflow-x-auto shadow-md rounded-lg'>
+			<div className='relative overflow-x-auto shadow-lg rounded-lg  bg-darkPanel'>
 				<table className='w-full text-left table-fixed'>
 
 					{/* Table Head */}
-					<thead className='uppercase bg-gray-100/20 text-white/80 text-sm'>
+					<thead className='uppercase text-white/80 text-sm bg-gray-500/40'>
 						<tr>
 							<th scope="col" className="p-2 w-16">
 								<div className="flex items-center justify-center">
-									<input id="checkbox-all-search" checked={allCheck}  type="checkbox" className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500" onChange={handleAllCheck}/>
+									<input id="checkbox-all-search" checked={allCheck}  type="checkbox" className="w-4 h-4 rounded border-gray-700 rounded text-darkLamon/70 focus:ring-darkLamon/80" onChange={handleAllCheck}/>
 									<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 								</div>
 							</th>
@@ -140,7 +144,7 @@ function ShoppingList() {
 									</svg></a>
 								</div>
 							</th>
-							<th className='w-28 text-center'>
+							<th className='w-20 md:w-28 text-center'>
 									Action
 							</th>
 						</tr>
@@ -155,13 +159,13 @@ function ShoppingList() {
 							handleAddFormChange={handleAddFormChange}
 						/>
 						{items.map((item) => (
-							<tr key={item.id} className='bg-gray-100/5 hover:bg-gray-100/10 border-b border-white/10' >
+							<tr key={item.id} className='hover:bg-gray-100/10 border-b border-white/10' >
 								
 								{/* Check */}
 								<td className='table-cell items-center justify-center p-2'>
 									<div className="flex items-center justify-center">
 										<input type="checkbox"
-											className="cursor-pointer w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500"
+											className="cursor-pointer w-4 h-4 bg-gray-500 border-gray-700 rounded text-darkLamon/70 focus:ring-darkLamon/80"
 											onChange={() => handleCheck(item.id)}
 											checked={item.checked}
 										/>
@@ -172,11 +176,11 @@ function ShoppingList() {
 								{/* Item Name */}
 								<td
 									onClick={() => handleExpand(item.id)}
-									className='p-1 cursor-pointer'
+									className='p-1 cursor-pointer truncate'
 								>
 									<span
 										style={(item.checked) ? { textDecoration: 'line-through' } : null}
-										className='text-lg font-bold'
+										className='text-lg font-bold tracking-widest'
 									>
 										{item.name}
 									</span>
@@ -202,7 +206,7 @@ function ShoppingList() {
 								{/* Item Quantity */}
 								<td
 									onClick={() => handleExpand(item.id)}
-									className='cursor-pointer'
+									className='cursor-pointer text-darkLamon/50'
 								>
 									x {item.quantity}
 								</td>
@@ -212,31 +216,33 @@ function ShoppingList() {
 									onClick={() => handleExpand(item.id)}
 									className='cursor-pointer hidden lg:table-cell'
 								>
-									$ <span className='ml-1 mr-1'> {item.price} </span>
+									$ <span className='ml-1 mr-1 text-gray-400'> {item.price} </span>
 								</td>
 
 								{/* Item Total */}
 								<td
 									onClick={() => handleExpand(item.id)}
-									className='cursor-pointer'
+									className='cursor-pointer '
 								>
 									$ <span className='ml-1 mr-1'> {item.price * item.quantity} </span>
 								</td>
 
 								{/* Actions */}
 								<td>
-									<div className='flex items-center justify-center ml-2 mr-2'>
+									<div className='flex items-center justify-center ml-2 mr-2 text-gray-400'>
 										<FaTrash
 											role='button'
 											tabIndex="0"
+											size={20}
 											onClick={() => handleDelete(item.id)}
-											className='m-1'
+											className='m-1 hover:text-darkLamon hover:animate-bounce'
 										/>
 										<FaPen
 											role='button'
 											tabIndex="0"
+											size={20}
 											onClick={() => handleDelete(item.id)}
-											className='m-1'
+											className='m-1 hover:text-darkLamon hover:animate-bounce'
 										/>
 									</div>
 								</td>
@@ -245,7 +251,7 @@ function ShoppingList() {
 					</tbody>
 				</table>
 				{/* Total */}
-				<div className='flex font-semibold text-gray-900 dark:text-white pl-4 pr-4 p-1 float-right'>
+				<div className='flex font-semibold pl-4 pr-4 p-1 float-right text-white'>
 					Total: $ {totalPrice} 
 				</div>
 			</div>

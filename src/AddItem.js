@@ -7,7 +7,7 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 
 	return (
 		<>
-			<tr className="hidden md:table-row hover:bg-white/5">
+			<tr className="hidden md:table-row hover:bg-white/5 border-b border-white/10">
 
 				{/* Check */}
 				<td className='w-4 p-4'>
@@ -58,7 +58,7 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 				<td>
 					<div className='flex items-center justify-left mr-2 w-full pr-4'>
 						<div className='flex items-center justify-center border border-white/20 rounded-lg w-min-auto'>
-							<FaMinus size={15} className='mr-2 cursor-pointer' type='button' />
+							<FaMinus size={15} className='mr-2 ml-1 cursor-pointer hover:text-darkLamon' type='button' />
 							<input
 								type='number'
 								name='quantity'
@@ -69,7 +69,7 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 								onChange={handleAddFormChange}
 								className='p-1 w-11/12 bg-black/20 border-0 w-1/3 text-center'
 							/>
-							<FaPlus size={15} className='ml-2 cursor-pointer' type='button' />
+							<FaPlus size={15} className='ml-2 mr-1 cursor-pointer hover:text-darkLamon' type='button' />
 						</div>
 
 					</div>
@@ -99,10 +99,10 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 				</td>
 
 				{/* Actions */}
-				<td className='h-full'>
+				<td className='h-full text-gray-400'>
 					<div className='flex justify-center items-center ml-2 mr-2 '>
-						<FaCheck className='m-1 cursor-pointer' type='button' onClick={handleAdd} />
-						<GrPowerReset className='m-1 cursor-pointer' type='button' onClick={handleReset} />
+						<FaCheck className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce' type='button' onClick={handleAdd} size={20}/>
+						<GrPowerReset className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce' type='button' onClick={handleReset} size={20}/>
 					</div>
 				</td>
 			</tr>
