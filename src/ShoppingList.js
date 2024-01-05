@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaPen } from "react-icons/fa";
 import AddItem from './AddItem';
 import AddItem2 from './AddItem2';
 
@@ -49,9 +49,8 @@ function ShoppingList() {
 
 	// User delete item
 	const handleDelete = (id) => {
-		// const listItems = items.filter((item) => item.id !== id)
-		console.log("delete?");
-		// setItems(listItems)
+		const listItems = items.filter((item) => item.id !== id)
+		setItems(listItems)
 	}
 
 	// User add item
@@ -95,13 +94,13 @@ function ShoppingList() {
 									<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 								</div>
 							</th>
-							<th scope="col" className="md:w-1/2"> Item </th>
-							<th > 
+							<th scope="col" className="md:w-1/3 lg:w-1/2"> Item </th>
+							<th className='w-24 md:w-36'> 
 								<span className="hidden md:inline-flex">
 									Quantity 
 								</span> 
 							</th>
-							<th className="hidden md:table-cell">
+							<th className="hidden lg:table-cell w-24">
 								<div className='flex items-center justify-centers'>
 									Price
 									<a href="#"><svg className="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -109,7 +108,7 @@ function ShoppingList() {
 									</svg></a>
 								</div>
 							</th>
-							<th>
+							<th className='w-12 lg:w-24'>
 								<div className='flex items-center justify-centers'>
 									Total
 									<a href="#"><svg className="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -117,8 +116,8 @@ function ShoppingList() {
 									</svg></a>
 								</div>
 							</th>
-							<th>
-								Action
+							<th className='w-32 text-center'>
+									Action
 							</th>
 						</tr>
 					</thead>
@@ -163,8 +162,12 @@ function ShoppingList() {
 												{item.description}
 											</div>
 											{/* Price */}
-											<div className='md:hidden'>
+											<div className='lg:hidden'>
 												<span className='uppercase'>price</span>: ${item.price}
+											</div>
+											{/* Quantity */}
+											<div className='md:hidden'>
+												<span className='uppercase'>qty</span>: {item.quantity}
 											</div>
 										</div>
 										: null}
@@ -175,13 +178,13 @@ function ShoppingList() {
 									onClick={() => handleExpand(item.id)}
 									className='cursor-pointer'
 								>
-									x{item.quantity}
+									x {item.quantity}
 								</td>
 
 								{/* Item Price */}
 								<td
 									onClick={() => handleExpand(item.id)}
-									className='cursor-pointer hidden md:inline-flex'
+									className='cursor-pointer hidden lg:table-cell'
 								>
 									$ <span className='ml-1 mr-1'> {item.price} </span>
 								</td>
@@ -196,11 +199,18 @@ function ShoppingList() {
 
 								{/* Actions */}
 								<td>
-									<div className='flex items-center ml-2 mr-2'>
+									<div className='flex items-center justify-center ml-2 mr-2'>
 										<FaTrash
 											role='button'
 											tabIndex="0"
 											onClick={() => handleDelete(item.id)}
+											className='m-1'
+										/>
+										<FaPen
+											role='button'
+											tabIndex="0"
+											onClick={() => handleDelete(item.id)}
+											className='m-1'
 										/>
 									</div>
 								</td>
