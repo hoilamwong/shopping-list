@@ -2,13 +2,13 @@ import React from 'react'
 import { FaMinus, FaPlus, FaCheck } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 
-function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
+function AddItem({ newItem, inputRef, handleReset, handleAdd, handleAddFormChange }) {
 
 
 	return (
 		<>
+			{/* <tr className="hidden md:table-row hover:bg-white/5 border-b border-white/10" onKeyDown={ (e) => { if(e.key === "Enter") handleAdd();}}> */}
 			<tr className="hidden md:table-row hover:bg-white/5 border-b border-white/10">
-
 				{/* Check */}
 				<td className='w-4 p-4'>
 					<div className="flex items-center justify-center">
@@ -23,6 +23,7 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 				<td className='pt-2 pb-2'>
 					<input
 						id='addFormItemName'
+						ref={inputRef}
 						autoFocus
 						type='text'
 						placeholder='Item Name'
@@ -30,6 +31,7 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 						name='name'
 						value={newItem.name? newItem.name : ""}
 						onChange={handleAddFormChange}
+						onKeyDown={ (e) => { if(e.key === "Enter") handleAdd();}}
 						className='p-1 pl-2 mr-1 w-8/12 bg-black/20 rounded-lg border-0 focus:ring-white/10'
 					/>
 					{/* MD: Item Price */}
@@ -40,6 +42,7 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 							name='price'
 							value={newItem.price? newItem.price : ""}
 							onChange={handleAddFormChange}
+							onKeyDown={ (e) => { if(e.key === "Enter") handleAdd();}}
 							className='p-1 pl-2 mr-1 mt-1 w-1/4 bg-black/20 rounded-lg border-0 focus:ring-white/10'
 						/>
 					</div>
@@ -50,6 +53,7 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 						name='description'
 						value={newItem? newItem.description : ""}
 						onChange={handleAddFormChange}
+						onKeyDown={ (e) => { if(e.key === "Enter") handleAdd();}}
 						className='p-1 pl-2 mr-1 mt-1 w-11/12 bg-black/20 rounded-lg border-0 focus:ring-white/10'
 					/>
 				</td>
@@ -67,6 +71,7 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 								min={1}
 								max={20}
 								onChange={handleAddFormChange}
+								onKeyDown={ (e) => { if(e.key === "Enter") handleAdd();}}
 								className='p-1 w-11/12 bg-black/20 border-0 w-1/3 text-center'
 							/>
 							<FaPlus size={15} className='ml-2 mr-1 cursor-pointer hover:text-darkLamon' type='button' />
@@ -85,6 +90,7 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 							name='price'
 							value={newItem.price? newItem.price : ""}
 							onChange={handleAddFormChange}
+							onKeyDown={ (e) => { if(e.key === "Enter") handleAdd();}}
 							className='m-1 p-1 pl-2 w-1/2 bg-black/20 rounded-lg border-0 focus:ring-white/10'
 						/>
 					</div>
@@ -101,8 +107,12 @@ function AddItem({ newItem, handleReset, handleAdd, handleAddFormChange }) {
 				{/* Actions */}
 				<td className='h-full text-gray-400'>
 					<div className='flex justify-center items-center ml-2 mr-2 '>
-						<FaCheck className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce' type='button' onClick={handleAdd} size={20}/>
-						<GrPowerReset className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce' type='button' onClick={handleReset} size={20}/>
+						<button className='focus:ring-white/10 m-1 ' onKeyDown={ (e) => { if(e.key === "Enter") handleAdd();}}>
+							<FaCheck className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce' type='button' onClick={handleAdd} size={20}/>
+						</button>
+						<button className='focus:ring-white/10' onKeyDown={ (e) => { if(e.key === "Enter") handleReset();}}>
+							<GrPowerReset className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce ' type='button' onClick={handleReset} size={20}/>
+						</button>
 					</div>
 				</td>
 			</tr>

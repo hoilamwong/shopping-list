@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { FaTrash, FaPen } from "react-icons/fa";
 import AddItem from './AddItem';
 
@@ -7,6 +7,8 @@ function ShoppingList() {
 	const [expandItems, setExpandItems] = useState([])
 	const [newItem, setNewItem] = useState('')
 	const [allCheck, setAllCheck] = useState(false)
+	
+	const inputRef = useRef(null);
 
 	const defaultItemsList = {
 		id : items.length ? items[items.length - 1].id + 1 : 1,
@@ -34,6 +36,7 @@ function ShoppingList() {
 	const handleReset = () => {
 		//Reset Style
 		document.getElementById('addFormItemName').style.border = "none"
+		inputRef.current.focus();
 
 		// Set New Item
 		setNewItem(defaultItemsList)
@@ -91,6 +94,8 @@ function ShoppingList() {
 		const listItems = [...items, newItem]
 		setItems(listItems)
 		setNewItem("")
+
+		inputRef.current.focus();
 	}
 
 	// User is adding an item
@@ -154,6 +159,7 @@ function ShoppingList() {
 					<tbody>
 						<AddItem
 							newItem={newItem}
+							inputRef={inputRef}
 							handleReset={handleReset}
 							handleAdd={handleAdd}
 							handleAddFormChange={handleAddFormChange}
