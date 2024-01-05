@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FaTrash, FaPen } from "react-icons/fa";
 import AddItem from './AddItem';
-import AddItem2 from './AddItem2';
 
 function ShoppingList() {
 	const [items, setItems] = useState(JSON.parse(localStorage.getItem('shopping-list')) || [])
@@ -149,7 +148,7 @@ function ShoppingList() {
 
 					{/* Table Body */}
 					<tbody>
-						<AddItem2
+						<AddItem
 							newItem={newItem}
 							handleReset={handleReset}
 							handleAdd={handleAdd}
