@@ -735,6 +735,10 @@ select {
   position: relative;
 }
 
+.float-right {
+  float: right;
+}
+
 .m-2 {
   margin: 0.5rem;
 }
@@ -972,6 +976,10 @@ select {
   width: 9rem;
 }
 
+.w-28 {
+  width: 7rem;
+}
+
 .flex-none {
   flex: none;
 }
@@ -1156,6 +1164,10 @@ select {
 
 .pb-2 {
   padding-bottom: 0.5rem;
+}
+
+.pr-4 {
+  padding-right: 1rem;
 }
 
 .text-left {
@@ -1376,6 +1388,10 @@ input {
 
   .md\:w-1\/3 {
     width: 33.333333%;
+  }
+
+  .md\:w-28 {
+    width: 7rem;
   }
 }
 

@@ -14,22 +14,31 @@ function ShoppingList() {
 		checked : false,
 		quantity: 1,
 		price: 0,
-		description: "no description yet..."
+		description: ""
 	}
 
-	// Action for when items is changed
+	// Update items in localstorage and update all checkboxes
+	// Whenever an item is changed / added
 	useEffect(() => {
 		// Update localstorage whenever items is changed
 		localStorage.setItem('shopping-list', JSON.stringify(items))
 
 		// Check if all is checked
 		const allChecked = items.every(item => item.checked)
-		console.log(allChecked);
 		setAllCheck(allChecked)
 	}, [items])
 
 	// Get Total Price of all items from list
 	const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0)
+
+	// User reset form
+	const handleReset = () => {
+		//Reset Style
+		document.getElementById('addFormItemName').style.border = "none"
+
+		// Set New Item
+		setNewItem(defaultItemsList)
+	}
 
 	// User toggle checkbox for an item
 	const handleCheck = (id) => {
@@ -40,7 +49,9 @@ function ShoppingList() {
 		setItems(listItems)
 	}
 
+	// User toggle all checkbox
 	const handleAllCheck = () => {
+		// toggle all checkboxes 
 		const listItems = items.map((item) => ({...item, checked : !allCheck}))
 		setAllCheck(!allCheck)
 		setItems(listItems)
@@ -66,18 +77,24 @@ function ShoppingList() {
 		setItems(listItems)
 	}
 
-	// User add item
-	const handleAdd = (e) => {
-		// e.preventDefault()
-		// e.target.reset()
-		if (!newItem) return
+	// User add an item
+	const handleAdd = () => {
+		if (!newItem || !newItem.hasOwnProperty('name')){
+			// Set style to show error
+			document.getElementById('addFormItemName').style.border = "2px solid"
+			document.getElementById('addFormItemName').style.borderColor = "rgba(200, 70, 70, 0.7)"
+			return
+		}
+
+		// Reset Style
+		document.getElementById('addFormItemName').style.border = "none"
 
 		const listItems = [...items, newItem]
-		setNewItem('')
 		setItems(listItems)
+		setNewItem("")
 	}
 
-	// User is adding item
+	// User is adding an item
 	const handleAddFormChange = (e) => {
 		// set default value for newItem
 		if (!newItem) {
@@ -86,15 +103,8 @@ function ShoppingList() {
 		setNewItem((newItem) => ({ ...newItem, [e.target.name]: e.target.value }))
 	}
 
-
-
 	return (
 		<div className='m-2 p-2 relative overflow-x-auto'>
-			{/* Add Item Form */}
-			{/* <AddItem
-				handleAdd={handleAdd}
-				handleAddFormChange={handleAddFormChange}
-			/> */}
 
 			{/* Items Table */}
 			<div className='relative overflow-x-auto shadow-md rounded-lg'>
@@ -110,7 +120,7 @@ function ShoppingList() {
 								</div>
 							</th>
 							<th scope="col" className="md:w-1/3 lg:w-1/2"> Item </th>
-							<th className='w-24 md:w-36'> 
+							<th className='w-12 md:w-28'> 
 								<span className="hidden md:inline-flex">
 									Quantity 
 								</span> 
@@ -123,7 +133,7 @@ function ShoppingList() {
 									</svg></a>
 								</div>
 							</th>
-							<th className='w-12 lg:w-24'>
+							<th className='w-16 lg:w-24'>
 								<div className='flex items-center justify-centers'>
 									Total
 									<a href="#"><svg className="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -131,7 +141,7 @@ function ShoppingList() {
 									</svg></a>
 								</div>
 							</th>
-							<th className='w-32 text-center'>
+							<th className='w-28 text-center'>
 									Action
 							</th>
 						</tr>
@@ -141,6 +151,7 @@ function ShoppingList() {
 					<tbody>
 						<AddItem2
 							newItem={newItem}
+							handleReset={handleReset}
 							handleAdd={handleAdd}
 							handleAddFormChange={handleAddFormChange}
 						/>
@@ -175,7 +186,7 @@ function ShoppingList() {
 										<div className='text-white/60'>
 											{/* Description */}
 											<div>
-												{item.description}
+												{item.description ? item.description : "no description yet..."}
 											</div>
 											{/* Price */}
 											<div className='lg:hidden'>
@@ -233,17 +244,11 @@ function ShoppingList() {
 							</tr>
 						))}
 					</tbody>
-					{/* Table Foot for Total */}
-					<tfoot>
-						<tr className="font-semibold text-gray-900 dark:text-white">
-							<th></th>
-							<th></th>
-							<th></th>
-							<th>Total</th>
-							<th>$ <span className='ml-1 mr-1'> {totalPrice} </span> </th>
-						</tr>
-					</tfoot>
 				</table>
+				{/* Total */}
+				<div className='flex font-semibold text-gray-900 dark:text-white pl-4 pr-4 p-1 float-right'>
+					Total: $ {totalPrice} 
+				</div>
 			</div>
 		</div>
 	)
