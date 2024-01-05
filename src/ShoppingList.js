@@ -47,8 +47,8 @@ function ShoppingList() {
 
 	// User add item
 	const handleAdd = (e) => {
-		e.preventDefault()
-		e.target.reset()
+		// e.preventDefault()
+		// e.target.reset()
 		if (!newItem) return
 
 		const listItems = [...items, newItem]
@@ -62,11 +62,13 @@ function ShoppingList() {
 		if (!newItem) {
 			// new ID
 			const newId = items.length ? items[items.length - 1].id + 1 : 1
-			// new NewItem with default id and quantity
+			// new NewItem with default id, quantity, price, and checked
 			setNewItem((newItem) => ({
 				...newItem,
 				id: newId,
 				quantity: 1,
+				price: 0,
+				checked: false,
 				description: "no description"
 			}))
 		}
@@ -75,47 +77,47 @@ function ShoppingList() {
 
 	return (
 		<div className='m-2 p-2 relative overflow-x-auto'>
-			{/* Add Item Form */}
+			{/* Add Item Form
 			<AddItem
 				handleAdd={handleAdd}
 				handleAddFormChange={handleAddFormChange}
-			/>
+			/> */}
 
 			{/* Items Table */}
 			<div className='relative overflow-x-auto shadow-md rounded-lg'>
-				<table className='w-full text-left table-fixed'>
+				{/* <div className='grid grid-cols-6'> */}
 					{/* Table Head */}
-					<thead className='uppercase bg-gray-100/20 text-white/80 text-sm'>
-						<tr>
-							<th scope="col" className="p-2 w-16">
+					<div className='grid grid-cols-6 uppercase bg-gray-100/20 text-white/80 text-sm'>
+						<div>
+							<div className="p-2 w-16">
 								<div className="flex items-center justify-center">
 									<input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500" />
 									<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 								</div>
-							</th>
-							<th scope="col" className="w-3/6"> Item </th>
-							<th > Quantity </th>
-							<th >
+							</div>
+							<div scope="col" className="w-3/6"> Item </div>
+							<div > Quantity </div>
+							<div >
 								<div className='flex items-center'>
 									Price
 									<a href="#"><svg className="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
 										<path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
 									</svg></a>
 								</div>
-							</th>
-							<th>
+							</div>
+							<div>
 								<div className='flex items-center justify-centers'>
 									Total
 									<a href="#"><svg className="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
 										<path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
 									</svg></a>
 								</div>
-							</th>
-							<th>
+							</div>
+							<div>
 								Action
-							</th>
-						</tr>
-					</thead>
+							</div>
+						{/* </div> */}
+					</div>
 
 					{/* Table Body */}
 					<tbody>
@@ -188,7 +190,7 @@ function ShoppingList() {
 							<th>$ <span className='ml-1 mr-1'> {totalPrice} </span> </th>
 						</tr>
 					</tfoot>
-				</table>
+				</div>
 			</div>
 		</div>
 	)

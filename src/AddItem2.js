@@ -30,7 +30,7 @@ function AddItem({ newItem, handleAdd, handleAddFormChange }) {
 				{/* Item Quantity */}
 				<td>
 					<div className='flex items-center border border-white/20 rounded-lg w-10/12 m-1 justify-center'>
-						<FaMinus size={15} className='ml-2 mr-2'/>
+						<FaMinus size={15} className='ml-2 mr-2' />
 						<input
 							autoFocus
 							type='number'
@@ -44,13 +44,13 @@ function AddItem({ newItem, handleAdd, handleAddFormChange }) {
 							onChange={handleAddFormChange}
 							className='p-1 w-11/12 bg-black/20 border-0 w-1/3 text-right'
 						/>
-						<FaPlus size={15} className='ml-2 mr-2'/>
-					</div>	
+						<FaPlus size={15} className='ml-2 mr-2' />
+					</div>
 				</td>
 				{/* Item Price */}
 				<td>
 					<div className='flex items-center justify-left'>
-						$ 
+						$
 						<input
 							autoFocus
 							type='text'
@@ -65,14 +65,20 @@ function AddItem({ newItem, handleAdd, handleAddFormChange }) {
 				<td>
 					$
 					<span className='ml-2 mr-2'>
-						{newItem.price * newItem.quantity}
+						{newItem.price ? newItem.price * newItem.quantity : 0}
 					</span>
 				</td>
 				{/* Actions */}
 				<td>
-					<div className='flex items-center'>
-						submit
-					</div>
+					<button
+						type='submit'
+						value="Submit"
+						aria-label='Add Item'
+						className='border p-1 rounded'
+						onClick={handleAdd}
+					>
+						Add
+					</button>
 				</td>
 			</tr>
 		</>
