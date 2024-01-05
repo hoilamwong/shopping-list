@@ -9,8 +9,8 @@ function AddItem({ newItem, handleAdd, handleAddFormChange }) {
 				{/* Check */}
 				<td className='w-4 p-4'>
 					<div className="flex items-center justify-center">
-						<input id="checkbox-item" type="checkbox"
-							className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500"
+						<input id="checkbox-item" type="checkbox" disabled={true}
+							className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500 cursor-no-drop" 
 						/>
 						<label htmlFor="checkbox-item" className="sr-only">checkbox</label>
 					</div>

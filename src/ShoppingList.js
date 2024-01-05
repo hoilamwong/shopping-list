@@ -7,6 +7,7 @@ function ShoppingList() {
 	const [items, setItems] = useState(JSON.parse(localStorage.getItem('shopping-list')) || [])
 	const [expandItems, setExpandItems] = useState([])
 	const [newItem, setNewItem] = useState('')
+	const [allCheck, setAllCheck] = useState(false)
 
 	const defaultItemsList = {
 		id : items.length ? items[items.length - 1].id + 1 : 1,
@@ -16,9 +17,15 @@ function ShoppingList() {
 		description: "no description yet..."
 	}
 
-	// Update localstorage whenever items is changed
+	// Action for when items is changed
 	useEffect(() => {
+		// Update localstorage whenever items is changed
 		localStorage.setItem('shopping-list', JSON.stringify(items))
+
+		// Check if all is checked
+		const allChecked = items.every(item => item.checked)
+		console.log(allChecked);
+		setAllCheck(allChecked)
 	}, [items])
 
 	// Get Total Price of all items from list
@@ -30,6 +37,12 @@ function ShoppingList() {
 		// if id is matched, reverse the checked on that item, else return original item
 		const listItems = items.map((item) => item.id === id ?
 			{ ...item, checked: !item.checked } : item)
+		setItems(listItems)
+	}
+
+	const handleAllCheck = () => {
+		const listItems = items.map((item) => ({...item, checked : !allCheck}))
+		setAllCheck(!allCheck)
 		setItems(listItems)
 	}
 
@@ -73,6 +86,8 @@ function ShoppingList() {
 		setNewItem((newItem) => ({ ...newItem, [e.target.name]: e.target.value }))
 	}
 
+
+
 	return (
 		<div className='m-2 p-2 relative overflow-x-auto'>
 			{/* Add Item Form */}
@@ -90,7 +105,7 @@ function ShoppingList() {
 						<tr>
 							<th scope="col" className="p-2 w-16">
 								<div className="flex items-center justify-center">
-									<input id="checkbox-all-search" type="checkbox" className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500" />
+									<input id="checkbox-all-search" checked={allCheck}  type="checkbox" className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500" onChange={handleAllCheck}/>
 									<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 								</div>
 							</th>
@@ -133,11 +148,12 @@ function ShoppingList() {
 							<tr key={item.id} className='bg-gray-100/5 hover:bg-gray-100/10 border-b border-white/10' >
 								
 								{/* Check */}
-								<td className='flex items-center justify-center p-2'>
+								<td className='table-cell items-center justify-center p-2'>
 									<div className="flex items-center justify-center">
 										<input type="checkbox"
 											className="cursor-pointer w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500"
 											onChange={() => handleCheck(item.id)}
+											checked={item.checked}
 										/>
 										<label htmlFor="checkbox-item" className="sr-only">checkbox</label>
 									</div>
