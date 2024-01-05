@@ -1,11 +1,10 @@
 import React from 'react'
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { FaMinus, FaPlus, FaCheck } from "react-icons/fa";
 
 function AddItem({ newItem, handleAdd, handleAddFormChange }) {
-
 	return (
 		<>
-			<tr>
+			<tr className="hidden md:table-row">
 				{/* Check */}
 				<td className='w-4 p-4'>
 					<div className="flex items-center justify-center">
@@ -24,27 +23,26 @@ function AddItem({ newItem, handleAdd, handleAddFormChange }) {
 						required
 						name='name'
 						onChange={handleAddFormChange}
-						className='p-1 mr-1 w-11/12 bg-black/20 rounded-lg border-0 focus:ring-white'
+						className='p-1 pl-2 mr-1 w-11/12 bg-black/20 rounded-lg border-0 focus:ring-white/10'
 					/>
 				</td>
 				{/* Item Quantity */}
 				<td>
-					<div className='flex items-center border border-white/20 rounded-lg w-10/12 m-1 justify-center'>
-						<FaMinus size={15} className='ml-2 mr-2'/>
+					<div className='flex items-center justify-center border border-white/20 rounded-lg w-fit m-auto m-2'>
+						<FaMinus size={15} className='ml-2 mr-2 cursor-pointer' type='button'/>
 						<input
 							autoFocus
-							type='number'
+							type='text'
+							inputMode='numeric'
+							pattern="[1-9\s]"
 							placeholder='Item Name'
 							required
-							min='1'
-							max='20'
-							step='1'
 							name='quantity'
 							defaultValue={1}
 							onChange={handleAddFormChange}
-							className='p-1 w-11/12 bg-black/20 border-0 w-1/3 text-right'
+							className='p-1 w-11/12 bg-black/20 border-0 w-1/3 text-right overflow-hidden'
 						/>
-						<FaPlus size={15} className='ml-2 mr-2'/>
+						<FaPlus size={15} className='ml-2 mr-2 cursor-pointer' type='button'/>
 					</div>	
 				</td>
 				{/* Item Price */}
@@ -65,14 +63,12 @@ function AddItem({ newItem, handleAdd, handleAddFormChange }) {
 				<td>
 					$
 					<span className='ml-2 mr-2'>
-						{newItem.price * newItem.quantity}
+						{newItem.price? newItem.price * newItem.quantity: 0}
 					</span>
 				</td>
 				{/* Actions */}
 				<td>
-					<div className='flex items-center'>
-						submit
-					</div>
+					<FaCheck size={15} className='ml-2 mr-2 cursor-pointer' type='button' onClick={handleAdd}/>
 				</td>
 			</tr>
 		</>

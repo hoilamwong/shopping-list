@@ -8,6 +8,14 @@ function ShoppingList() {
 	const [expandItems, setExpandItems] = useState([])
 	const [newItem, setNewItem] = useState('')
 
+	const defaultItemsList = {
+		id : items.length ? items[items.length - 1].id + 1 : 1,
+		checked : false,
+		quantity: 1,
+		price: 0,
+		description: "no description yet..."
+	}
+
 	// Update localstorage whenever items is changed
 	useEffect(() => {
 		localStorage.setItem('shopping-list', JSON.stringify(items))
@@ -41,14 +49,15 @@ function ShoppingList() {
 
 	// User delete item
 	const handleDelete = (id) => {
-		const listItems = items.filter((item) => item.id !== id)
-		setItems(listItems)
+		// const listItems = items.filter((item) => item.id !== id)
+		console.log("delete?");
+		// setItems(listItems)
 	}
 
 	// User add item
 	const handleAdd = (e) => {
-		e.preventDefault()
-		e.target.reset()
+		// e.preventDefault()
+		// e.target.reset()
 		if (!newItem) return
 
 		const listItems = [...items, newItem]
@@ -60,15 +69,7 @@ function ShoppingList() {
 	const handleAddFormChange = (e) => {
 		// set default value for newItem
 		if (!newItem) {
-			// new ID
-			const newId = items.length ? items[items.length - 1].id + 1 : 1
-			// new NewItem with default id and quantity
-			setNewItem((newItem) => ({
-				...newItem,
-				id: newId,
-				quantity: 1,
-				description: "no description"
-			}))
+			setNewItem(defaultItemsList)
 		}
 		setNewItem((newItem) => ({ ...newItem, [e.target.name]: e.target.value }))
 	}
@@ -76,14 +77,15 @@ function ShoppingList() {
 	return (
 		<div className='m-2 p-2 relative overflow-x-auto'>
 			{/* Add Item Form */}
-			<AddItem
+			{/* <AddItem
 				handleAdd={handleAdd}
 				handleAddFormChange={handleAddFormChange}
-			/>
+			/> */}
 
 			{/* Items Table */}
 			<div className='relative overflow-x-auto shadow-md rounded-lg'>
 				<table className='w-full text-left table-fixed'>
+
 					{/* Table Head */}
 					<thead className='uppercase bg-gray-100/20 text-white/80 text-sm'>
 						<tr>
@@ -93,10 +95,14 @@ function ShoppingList() {
 									<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 								</div>
 							</th>
-							<th scope="col" className="w-3/6"> Item </th>
-							<th > Quantity </th>
-							<th >
-								<div className='flex items-center'>
+							<th scope="col" className="md:w-1/2"> Item </th>
+							<th > 
+								<span className="hidden md:inline-flex">
+									Quantity 
+								</span> 
+							</th>
+							<th className="hidden md:table-cell">
+								<div className='flex items-center justify-centers'>
 									Price
 									<a href="#"><svg className="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
 										<path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
@@ -126,19 +132,22 @@ function ShoppingList() {
 						/>
 						{items.map((item) => (
 							<tr key={item.id} className='bg-gray-100/5 hover:bg-gray-100/10 border-b border-white/10' >
+								
 								{/* Check */}
 								<td className='flex items-center justify-center p-2'>
 									<div className="flex items-center justify-center">
-										<input id="checkbox-item" type="checkbox" 
-											className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500"
-											onChange={() => handleCheck(item.id)} 
+										<input type="checkbox"
+											className="cursor-pointer w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500"
+											onChange={() => handleCheck(item.id)}
 										/>
 										<label htmlFor="checkbox-item" className="sr-only">checkbox</label>
 									</div>
 								</td>
+
 								{/* Item Name */}
 								<td
-									onDoubleClick={() => handleExpand(item.id)}
+									onClick={() => handleExpand(item.id)}
+									className='p-1 cursor-pointer'
 								>
 									<span
 										style={(item.checked) ? { textDecoration: 'line-through' } : null}
@@ -148,26 +157,46 @@ function ShoppingList() {
 									</span>
 									{/* Expandable */}
 									{expandItems.includes(item.id) ?
-										<div>
-											{item.description}
+										<div className='text-white/60'>
+											{/* Description */}
+											<div>
+												{item.description}
+											</div>
+											{/* Price */}
+											<div className='md:hidden'>
+												<span className='uppercase'>price</span>: ${item.price}
+											</div>
 										</div>
 										: null}
 								</td>
+
 								{/* Item Quantity */}
-								<td>
+								<td
+									onClick={() => handleExpand(item.id)}
+									className='cursor-pointer'
+								>
 									x{item.quantity}
 								</td>
+
 								{/* Item Price */}
-								<td>
+								<td
+									onClick={() => handleExpand(item.id)}
+									className='cursor-pointer hidden md:inline-flex'
+								>
 									$ <span className='ml-1 mr-1'> {item.price} </span>
 								</td>
+
 								{/* Item Total */}
-								<td>
+								<td
+									onClick={() => handleExpand(item.id)}
+									className='cursor-pointer'
+								>
 									$ <span className='ml-1 mr-1'> {item.price * item.quantity} </span>
 								</td>
+
 								{/* Actions */}
 								<td>
-									<div className='flex items-center'>
+									<div className='flex items-center ml-2 mr-2'>
 										<FaTrash
 											role='button'
 											tabIndex="0"
