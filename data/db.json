@@ -1,0 +1,20 @@
+{
+  "shopping-list": [
+    {
+      "id": 1,
+      "name": "one",
+      "checked": false,
+      "quantity": 1,
+      "price": 2.5,
+      "description": "no description"
+    },
+    {
+      "id": 3,
+      "name": "three",
+      "checked": false,
+      "quantity": 1,
+      "price": 2.5,
+      "description": "no description"
+    }
+  ]
+}
