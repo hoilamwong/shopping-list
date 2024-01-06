@@ -156,15 +156,15 @@ function ShoppingList() {
 					className={`ml-1 mt-0.5 hover:text-darkLamon hover:animate-bounce  ${addItem ? 'text-darkLamon/80' : 'text-gray-400'} `}
 				/>
 				{/* Toggle Expand */}
-				<IoIosArrowForward
-					role='button'
-					strokeWidth={20}
-					size={27}
-					onClick={toggleExpand}
-					className={`hover:text-darkLamon hover:animate-bounce ${allExpand ? 'rotate-90 text-darkLamon/80' : 'text-gray-400'} `}
-				/>
-
-
+				<div className={`hover:animate-bounce`}>
+					<IoIosArrowForward
+						role='button'
+						strokeWidth={20}
+						size={27}
+						onClick={toggleExpand}
+						className={`hover:text-darkLamon ${allExpand ? 'rotate-90 text-darkLamon/80' : 'text-gray-400'} `}
+					/>
+				</div>
 			</div>
 
 
@@ -178,18 +178,20 @@ function ShoppingList() {
 						<tr>
 							<th scope="col" className="p-2 w-16 h-full">
 								<div className='flex items-center w-full'>
-									<IoIosArrowForward
-										role='button'
-										strokeWidth={20}
-										size={20}
-										onClick={toggleExpand}
-										className={`hover:text-darkLamon hover:animate-bounce absolute ${allExpand ? 'rotate-90 text-darkLamon/80' : 'text-gray-400'} `}
-									/>
+									<div className={`absolute hover:animate-bounce`}>
+										<IoIosArrowForward
+											role='button'
+											strokeWidth={20}
+											size={20}
+											onClick={toggleExpand}
+											className={`hover:text-darkLamon ${allExpand ? 'rotate-90 text-darkLamon/80' : 'text-gray-400'} `}
+										/>
+									</div>
 									{/* Header CheckBox  */}
 									<div className="flex items-center justify-center w-full">
-										<input 
+										<input
 											id="checkbox-all-search" checked={allCheck} type="checkbox"
-											className="ml-4 cursor-pointer w-4 h-4 rounded border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80" 
+											className="ml-4 cursor-pointer w-4 h-4 rounded border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80"
 											onChange={handleAllCheck} />
 										<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 									</div>
