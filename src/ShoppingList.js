@@ -20,6 +20,8 @@ function ShoppingList() {
 		description: ""
 	}
 
+	useEffect(() => {
+	}, [])
 	// Update items in localstorage and update all checkboxes
 	// Whenever an item is changed / added
 	useEffect(() => {
@@ -29,7 +31,9 @@ function ShoppingList() {
 		// Check if all is checked
 		const allChecked = items.every(item => item.checked)
 		setAllCheck(allChecked)
-	}, [items])
+		setNewItem(defaultItemsList)
+
+	}, [,items])
 
 	// Get Total Price of all items from list
 	const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0)
@@ -102,11 +106,15 @@ function ShoppingList() {
 
 	// User is adding an item
 	const handleAddFormChange = (e) => {
+		const {name, value, type, checked } = e.target;
 		// set default value for newItem
 		if (!newItem) {
 			setNewItem(defaultItemsList)
 		}
-		setNewItem((newItem) => ({ ...newItem, [e.target.name]: e.target.value }))
+		setNewItem((prevItem) => ({ 
+			...prevItem,
+			// Set the value for [name]
+			[name]: type === 'checkbox' ? checked : value }))
 	}
 
 
@@ -129,11 +137,11 @@ function ShoppingList() {
 				<table className='w-full text-left table-fixed'>
 
 					{/* Table Head */}
-					<thead className='uppercase text-white/80 text-sm bg-gray-500/40 '>
+					<thead className='uppercase text-white/80 text-sm bg-gray-500/40'>
 						<tr>
-							<th scope="col" className="p-2 w-16">
+							<th scope="col" className="p-2 w-16 ">
 								<div className="flex items-center justify-center">
-									<input id="checkbox-all-search" checked={allCheck} type="checkbox" className="w-4 h-4 rounded border-gray-700 rounded text-darkLamon/70 focus:ring-darkLamon/80" onChange={handleAllCheck} />
+									<input id="checkbox-all-search" checked={allCheck} type="checkbox" className="cursor-pointer w-4 h-4 rounded border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80" onChange={handleAllCheck} />
 									<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 								</div>
 							</th>
@@ -171,6 +179,7 @@ function ShoppingList() {
 						{addItem ?
 							<AddItem
 								newItem={newItem}
+								setNewItem={setNewItem}
 								inputRef={inputRef}
 								handleReset={handleReset}
 								handleAdd={handleAdd}
@@ -184,7 +193,7 @@ function ShoppingList() {
 								<td className='table-cell items-center justify-center p-2'>
 									<div className="flex items-center justify-center">
 										<input type="checkbox"
-											className="cursor-pointer w-4 h-4 bg-gray-500 border-gray-700 rounded text-darkLamon/70 focus:ring-darkLamon/80"
+											className="cursor-pointer w-4 h-4 bg-gray-500 border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80"
 											onChange={() => handleCheck(item.id)}
 											checked={item.checked}
 										/>
@@ -200,7 +209,7 @@ function ShoppingList() {
 									<div className='flex items-center w-full'>
 										<span 
 											style={(item.checked) ? { textDecoration: 'line-through' } : null}
-											className='text-lg font-bold tracking-widest flex'
+											className='text-lg font-bold tracking-widest flex text-xl text-white/95 underline decoration-gray-400'
 										>
 											{item.name}
 										</span>
@@ -281,7 +290,7 @@ function ShoppingList() {
 					</tbody>
 				</table>
 				{/* Total */}
-				<div className='flex font-semibold pl-4 pr-4 p-1 float-right text-white'>
+				<div className='flex font-semibold pl-4 pr-4 p-1 float-right text-white/95'>
 					Total: $ {totalPrice}
 				</div>
 			</div>

@@ -2,7 +2,7 @@ import React from 'react'
 import { FaMinus, FaPlus, FaCheck } from "react-icons/fa";
 import { GrPowerReset } from "react-icons/gr";
 
-function AddItem({ newItem, inputRef, handleReset, handleAdd, handleAddFormChange }) {
+function AddItem({ newItem, setNewItem, inputRef, handleReset, handleAdd, handleAddFormChange }) {
 
 
 	return (
@@ -12,8 +12,13 @@ function AddItem({ newItem, inputRef, handleReset, handleAdd, handleAddFormChang
 				{/* Check */}
 				<td className='w-4 p-4'>
 					<div className="flex items-center justify-center">
-						<input id="checkbox-item" type="checkbox" disabled={true}
-							className="w-4 h-4 text-gray-900 bg-gray-500 rounded border-gray-700 rounded focus:ring-gray-500 cursor-no-drop"
+						<input 
+							className="w-4 h-4 border-white/10 rounded bg-gray-500 text-darkLamon/70 focus:ring-darkLamon/80"
+							id="checkbox-item" 
+							type="checkbox"
+							name='checked'
+							checked={newItem.checked || false}
+							onChange={handleAddFormChange}
 						/>
 						<label htmlFor="checkbox-item" className="sr-only">checkbox</label>
 					</div>
@@ -63,6 +68,7 @@ function AddItem({ newItem, inputRef, handleReset, handleAdd, handleAddFormChang
 							placeholder='Quantity'
 							name='quantity'
 							value={newItem.quantity ? newItem.quantity : ""}
+							onChange={handleAddFormChange}
 							min={1}
 							max={20}
 							onKeyDown={(e) => { if (e.key === "Enter") handleAdd(); }}
@@ -75,7 +81,14 @@ function AddItem({ newItem, inputRef, handleReset, handleAdd, handleAddFormChang
 				<td>
 					<div className='hidden md:flex items-center justify-left mr-2 w-full pr-4'>
 						<div className='flex items-center justify-center border border-white/20 rounded-lg w-min-auto'>
-							<FaMinus size={15} className='mr-2 ml-1 cursor-pointer hover:text-darkLamon' type='button' />
+							<FaMinus size={15} type='button'
+								className='mr-2 ml-1 cursor-pointer hover:text-darkLamon'
+								onClick={ () => {
+									if (newItem.quantity > 1){
+										setNewItem(prevItem => ({...prevItem, quantity: prevItem.quantity - 1}))
+									}
+								}} 
+							/>
 							<input
 								type='number'
 								name='quantity'
@@ -87,7 +100,14 @@ function AddItem({ newItem, inputRef, handleReset, handleAdd, handleAddFormChang
 								onKeyDown={(e) => { if (e.key === "Enter") handleAdd(); }}
 								className='p-1 w-11/12 bg-black/20 border-0 w-1/3 text-center'
 							/>
-							<FaPlus size={15} className='ml-2 mr-1 cursor-pointer hover:text-darkLamon' type='button' />
+							<FaPlus size={15} type='button'
+								className='ml-2 mr-1 cursor-pointer hover:text-darkLamon'  
+								onClick={() => {
+									if (newItem.quantity < 20){
+										setNewItem(prevItem => ({...prevItem, quantity: prevItem.quantity + 1}))
+									}
+								}}
+							/>
 						</div>
 
 					</div>

@@ -20,7 +20,7 @@ html {
   text-align: center;
   background-color: #1b1b23;
   height: 100vh;
-  color: white;
+  color: rgb(223, 223, 223);
 }
 
 input {
