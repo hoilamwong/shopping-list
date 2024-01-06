@@ -731,6 +731,10 @@ select {
   border-width: 0;
 }
 
+.absolute {
+  position: absolute;
+}
+
 .relative {
   position: relative;
 }
@@ -787,8 +791,36 @@ select {
   margin-top: 0.25rem;
 }
 
+.mt-1\.5 {
+  margin-top: 0.375rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mr-4 {
+  margin-right: 1rem;
+}
+
+.mb-auto {
+  margin-bottom: auto;
+}
+
+.mt-auto {
+  margin-top: auto;
+}
+
+.mt-0 {
+  margin-top: 0px;
+}
+
+.mt-0\.5 {
+  margin-top: 0.125rem;
+}
+
+.ml-4 {
+  margin-left: 1rem;
 }
 
 .flex {
@@ -871,8 +903,23 @@ select {
   table-layout: fixed;
 }
 
+.rotate-90 {
+  --tw-rotate: 90deg;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .cursor-pointer {
   cursor: pointer;
+}
+
+.select-none {
+  -webkit-user-select: none;
+          user-select: none;
+}
+
+.select-text {
+  -webkit-user-select: text;
+          user-select: text;
 }
 
 .items-center {
@@ -937,7 +984,7 @@ select {
 
 .bg-darkPanel {
   --tw-bg-opacity: 1;
-  background-color: rgb(27 26 34 / var(--tw-bg-opacity));
+  background-color: rgb(42 41 48 / var(--tw-bg-opacity));
 }
 
 .bg-gray-500 {
@@ -1057,8 +1104,9 @@ select {
   color: rgb(255 200 0 / 0.7);
 }
 
-.text-gray-300\/60 {
-  color: rgb(209 213 219 / 0.6);
+.text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
 }
 
 .text-gray-400 {
@@ -1066,13 +1114,9 @@ select {
   color: rgb(156 163 175 / var(--tw-text-opacity));
 }
 
-.text-gray-500\/60 {
-  color: rgb(107 114 128 / 0.6);
-}
-
-.text-white {
+.text-gray-600 {
   --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+  color: rgb(75 85 99 / var(--tw-text-opacity));
 }
 
 .text-white\/60 {
@@ -1083,28 +1127,16 @@ select {
   color: rgb(255 255 255 / 0.8);
 }
 
-.text-white\/90 {
-  color: rgb(255 255 255 / 0.9);
-}
-
 .text-white\/95 {
   color: rgb(255 255 255 / 0.95);
 }
 
-.underline {
-  text-decoration-line: underline;
+.text-darkLamon\/80 {
+  color: rgb(255 200 0 / 0.8);
 }
 
 .line-through {
   text-decoration-line: line-through;
-}
-
-.decoration-darkLamon {
-  text-decoration-color: #ffc800;
-}
-
-.decoration-gray-400 {
-  text-decoration-color: #9ca3af;
 }
 
 .shadow-lg {

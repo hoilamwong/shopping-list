@@ -13,7 +13,7 @@ function AddItem({ newItem, setNewItem, inputRef, handleReset, handleAdd, handle
 				<td className='w-4 p-4'>
 					<div className="flex items-center justify-center">
 						<input 
-							className="w-4 h-4 border-white/10 rounded bg-gray-500 text-darkLamon/70 focus:ring-darkLamon/80"
+							className="w-4 h-4 ml-4 border-white/10 rounded bg-gray-500 text-darkLamon/70 focus:ring-darkLamon/80"
 							id="checkbox-item" 
 							type="checkbox"
 							name='checked'
@@ -144,7 +144,10 @@ function AddItem({ newItem, setNewItem, inputRef, handleReset, handleAdd, handle
 							<FaCheck className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce' type='button' onClick={handleAdd} size={20} />
 						</button>
 						<button className='focus:ring-white/10' onKeyDown={(e) => { if (e.key === "Enter") handleReset(); }}>
-							<GrPowerReset className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce ' type='button' onClick={handleReset} size={20} />
+							<GrPowerReset 
+								className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce ' 
+								type='button' onClick={handleReset} size={20}
+							/>
 						</button>
 					</div>
 				</td>

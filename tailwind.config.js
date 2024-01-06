@@ -14,7 +14,7 @@ module.exports = {
       indigo: colors.indigo,
       yellow: colors.yellow,
       'darkLamon': '#ffc800',
-      'darkPanel': '#1b1a22',
+      'darkPanel': '#2a2930',
       'yellowText': '#f2c40e'
     },
     extend: {

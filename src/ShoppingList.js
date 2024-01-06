@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { FaTrash, FaPen, FaPlus } from "react-icons/fa";
+import { IoIosArrowForward } from "react-icons/io";
 import AddItem from './AddItem';
 
 function ShoppingList() {
 	const [items, setItems] = useState(JSON.parse(localStorage.getItem('shopping-list')) || [])
 	const [expandItems, setExpandItems] = useState([])
 	const [newItem, setNewItem] = useState('')
+
 	const [allCheck, setAllCheck] = useState(false)
+	const [allExpand, setAllExpand] = useState(false)
 
 	const [addItem, setAddItem] = useState(true)
 
@@ -20,8 +23,12 @@ function ShoppingList() {
 		description: ""
 	}
 
+	// Update allExpand if expandItems is changed
 	useEffect(() => {
-	}, [])
+		const newExpandItems = items.map((item) => item.id)
+		setAllExpand(expandItems.length === newExpandItems.length)
+	}, [expandItems, items])
+
 	// Update items in localstorage and update all checkboxes
 	// Whenever an item is changed / added
 	useEffect(() => {
@@ -32,8 +39,7 @@ function ShoppingList() {
 		const allChecked = items.every(item => item.checked)
 		setAllCheck(allChecked)
 		setNewItem(defaultItemsList)
-
-	}, [,items])
+	}, [, items])
 
 	// Get Total Price of all items from list
 	const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0)
@@ -79,10 +85,25 @@ function ShoppingList() {
 		setExpandItems(expandItemsList)
 	}
 
+	// Toggle expand
+	const toggleExpand = () => {
+		if (!allExpand) {
+			const newExpandItems = items.map((item) => item.id)
+			setExpandItems(newExpandItems)
+		} else {
+			setExpandItems([])
+		}
+		setAllExpand(!allExpand)
+	}
+
 	// User delete item
 	const handleDelete = (id) => {
 		const listItems = items.filter((item) => item.id !== id)
 		setItems(listItems)
+
+		// delete from expand items
+		const newExpandItems = expandItems.filter((foundId) => foundId !== id)
+		setExpandItems(newExpandItems)
 	}
 
 	// User add an item
@@ -106,31 +127,43 @@ function ShoppingList() {
 
 	// User is adding an item
 	const handleAddFormChange = (e) => {
-		const {name, value, type, checked } = e.target;
+		const { name, value, type, checked } = e.target;
 		// set default value for newItem
 		if (!newItem) {
 			setNewItem(defaultItemsList)
 		}
-		setNewItem((prevItem) => ({ 
+		setNewItem((prevItem) => ({
 			...prevItem,
 			// Set the value for [name]
-			[name]: type === 'checkbox' ? checked : value }))
+			[name]: type === 'checkbox' ? checked : value
+		}))
 	}
 
 
 	return (
 		<div className='ml-5 mr-5 p-2 relative overflow-x-auto'>
 
-			<div className='flex uppercase text-xl text-left font-bold text-gray-300/60 mt-4 mb-2 tracking-widest'>
-				shopping list
+			<div className='flex uppercase text-xl text-left font-bold text-gray-200 mt-4 mb-2 tracking-widest items-center'>
+				<span className='select-text'>shopping list</span>
+				{/* Toggle Add Form */}
 				<FaPlus
 					role='button'
 					size={20}
 					onClick={() => setAddItem(!addItem)}
-					className= {`m-1 hover:text-darkLamon hover:animate-bounce  ${addItem ? 'text-darkLamon/60': 'text-gray-500/60'} `}
+					className={`ml-1 mt-0.5 hover:text-darkLamon hover:animate-bounce  ${addItem ? 'text-darkLamon/80' : 'text-gray-400'} `}
 				/>
+				{/* Toggle Expand */}
+				<IoIosArrowForward
+					role='button'
+					strokeWidth={20}
+					size={27}
+					onClick={toggleExpand}
+					className={`hover:text-darkLamon hover:animate-bounce ${allExpand ? 'rotate-90 text-darkLamon/80' : 'text-gray-400'} `}
+				/>
+
+
 			</div>
-			
+
 
 			{/* Items Table */}
 			<div className='relative overflow-x-auto shadow-lg rounded-lg  bg-darkPanel'>
@@ -138,14 +171,31 @@ function ShoppingList() {
 
 					{/* Table Head */}
 					<thead className='uppercase text-white/80 text-sm bg-gray-500/40'>
+						{/* Toggle Expand All */}
 						<tr>
-							<th scope="col" className="p-2 w-16 ">
-								<div className="flex items-center justify-center">
-									<input id="checkbox-all-search" checked={allCheck} type="checkbox" className="cursor-pointer w-4 h-4 rounded border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80" onChange={handleAllCheck} />
-									<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
+							<th scope="col" className="p-2 w-16 h-full">
+								<div className='flex items-center w-full'>
+									<IoIosArrowForward
+										role='button'
+										strokeWidth={20}
+										size={20}
+										onClick={toggleExpand}
+										className={`hover:text-darkLamon hover:animate-bounce absolute ${allExpand ? 'rotate-90 text-darkLamon/80' : 'text-gray-400'} `}
+									/>
+									{/* Header CheckBox  */}
+									<div className="flex items-center justify-center w-full">
+										<input id="checkbox-all-search" checked={allCheck} type="checkbox"
+											className="ml-4 cursor-pointer w-4 h-4 rounded border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80" onChange={handleAllCheck} />
+										<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
+									</div>
+								</div>
+
+							</th>
+							<th scope="col" className="md:w-1/3 lg:w-1/2">
+								<div className='flex items-center'>
+									Item
 								</div>
 							</th>
-							<th scope="col" className="md:w-1/3 lg:w-1/2"> Item </th>
 							<th className='w-0 md:w-28'>
 								<span className="hidden md:inline-flex">
 									Quantity
@@ -185,15 +235,19 @@ function ShoppingList() {
 								handleAdd={handleAdd}
 								handleAddFormChange={handleAddFormChange}
 							/>
-						: null}
+							: null}
 						{items.map((item) => (
 							<tr key={item.id} className='hover:bg-gray-100/10 border-b border-white/10' >
 
 								{/* Check */}
 								<td className='table-cell items-center justify-center p-2'>
-									<div className="flex items-center justify-center">
+									<IoIosArrowForward
+										strokeWidth={20}
+										className={`text-gray-600 absolute ${expandItems.includes(item.id) ? 'rotate-90' : ''}`}
+									/>
+									<div className="flex h-full justify-center">
 										<input type="checkbox"
-											className="cursor-pointer w-4 h-4 bg-gray-500 border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80"
+											className="cursor-pointer ml-4 w-4 h-4 bg-gray-500 border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80"
 											onChange={() => handleCheck(item.id)}
 											checked={item.checked}
 										/>
@@ -207,23 +261,30 @@ function ShoppingList() {
 									className='p-1 cursor-pointer truncate'
 								>
 									<div className='flex items-center w-full'>
-										<span 
+										{/* <IoIosArrowForward
+											strokeWidth={20}
+											className={`text-gray-600 m-1 mt-1.5 ${expandItems.includes(item.id) ? 'rotate-90' : ''}`}
+										/> */}
+										<span
 											style={(item.checked) ? { textDecoration: 'line-through' } : null}
-											className='text-lg font-bold tracking-widest flex text-xl text-white/95 underline decoration-gray-400'
+											className='text-lg font-bold tracking-widest flex text-xl text-white/95 items-center select-text'
 										>
 											{item.name}
 										</span>
-									
-										{/* SM: Item Quantity */}
-										<p className='md:hidden ml-auto text-sm pr-2 tracking-tighter text-darkLamon/50'>
-											x {item.quantity}
-										</p>
+
+										{/* SM: Item Quantity && Not in expandItems */}
+										{!expandItems.includes(item.id) ?
+											<p className='md:hidden ml-auto text-sm pr-2 tracking-tighter text-darkLamon/50'>
+												x {item.quantity}
+											</p>
+											: null
+										}
 									</div>
 
 
 									{/* Expandable */}
 									{expandItems.includes(item.id) ?
-										<div className='text-white/60'>
+										<div className='text-white/60 select-text'>
 											{/* Description */}
 											<div>
 												{item.description ? item.description : "no description yet..."}
@@ -233,8 +294,8 @@ function ShoppingList() {
 												<span className='uppercase'>price</span>: ${item.price}
 											</div>
 											{/* Quantity */}
-											<div className='md:hidden'>
-												<span className='uppercase'>qty</span>: {item.quantity}
+											<div className='md:hidden text-darkLamon/50'>
+												x {item.quantity}
 											</div>
 										</div>
 										: null}
