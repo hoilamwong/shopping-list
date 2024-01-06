@@ -55,7 +55,9 @@ function ShoppingList() {
 	}
 
 	// User toggle checkbox for an item
-	const handleCheck = (id) => {
+	const handleCheck = (e, id) => {
+		e.stopPropagation()
+
 		// Check each item in items
 		// if id is matched, reverse the checked on that item, else return original item
 		const listItems = items.map((item) => item.id === id ?
@@ -83,6 +85,7 @@ function ShoppingList() {
 			expandItemsList.push(id)
 		}
 		setExpandItems(expandItemsList)
+		// e.stopImmediatePropagation();
 	}
 
 	// Toggle expand
@@ -184,8 +187,10 @@ function ShoppingList() {
 									/>
 									{/* Header CheckBox  */}
 									<div className="flex items-center justify-center w-full">
-										<input id="checkbox-all-search" checked={allCheck} type="checkbox"
-											className="ml-4 cursor-pointer w-4 h-4 rounded border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80" onChange={handleAllCheck} />
+										<input 
+											id="checkbox-all-search" checked={allCheck} type="checkbox"
+											className="ml-4 cursor-pointer w-4 h-4 rounded border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80" 
+											onChange={handleAllCheck} />
 										<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 									</div>
 								</div>
@@ -236,9 +241,13 @@ function ShoppingList() {
 								handleAddFormChange={handleAddFormChange}
 							/>
 							: null}
+						{/* Individual Item */}
 						{items.map((item) => (
-							<tr key={item.id} className='hover:bg-gray-100/10 border-b border-white/10' >
-
+							<tr
+								key={item.id}
+								className='hover:bg-gray-100/10 hover:cursor-pointer border-b border-white/10'
+								onClick={() => handleExpand(item.id)}
+							>
 								{/* Check */}
 								<td className='table-cell items-center justify-center p-2'>
 									<IoIosArrowForward
@@ -248,7 +257,8 @@ function ShoppingList() {
 									<div className="flex h-full justify-center">
 										<input type="checkbox"
 											className="cursor-pointer ml-4 w-4 h-4 bg-gray-500 border-white/10 rounded text-darkLamon/70 focus:ring-darkLamon/80"
-											onChange={() => handleCheck(item.id)}
+											onClick={(e) => e.stopPropagation()}
+											onChange={(e) => handleCheck(e, item.id)}
 											checked={item.checked}
 										/>
 										<label htmlFor="checkbox-item" className="sr-only">checkbox</label>
@@ -257,8 +267,7 @@ function ShoppingList() {
 
 								{/* Item Name */}
 								<td
-									onClick={() => handleExpand(item.id)}
-									className='p-1 cursor-pointer truncate'
+									className='p-1 truncate'
 								>
 									<div className='flex items-center w-full'>
 										{/* <IoIosArrowForward
@@ -303,8 +312,7 @@ function ShoppingList() {
 
 								{/* Item Quantity */}
 								<td
-									onClick={() => handleExpand(item.id)}
-									className='cursor-pointer text-darkLamon/50'
+									className='text-darkLamon/50'
 								>
 									<span className='hidden md:flex'>
 										x {item.quantity}
@@ -313,17 +321,13 @@ function ShoppingList() {
 
 								{/* Item Price */}
 								<td
-									onClick={() => handleExpand(item.id)}
-									className='cursor-pointer hidden lg:table-cell'
+									className='hidden lg:table-cell'
 								>
 									$ <span className='ml-1 mr-1 text-gray-400'> {item.price} </span>
 								</td>
 
 								{/* Item Total */}
-								<td
-									onClick={() => handleExpand(item.id)}
-									className='cursor-pointer '
-								>
+								<td>
 									$ <span className='ml-1 mr-1'> {item.price * item.quantity} </span>
 								</td>
 

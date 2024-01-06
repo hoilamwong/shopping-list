@@ -1192,6 +1192,10 @@ input {
   animation: bounce 1s infinite;
 }
 
+.hover\:cursor-pointer:hover {
+  cursor: pointer;
+}
+
 .hover\:bg-gray-100\/10:hover {
   background-color: rgb(243 244 246 / 0.1);
 }
