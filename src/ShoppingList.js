@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { FaTrash, FaPen } from "react-icons/fa";
+import { FaTrash, FaPen, FaPlus } from "react-icons/fa";
 import AddItem from './AddItem';
 
 function ShoppingList() {
@@ -7,12 +7,14 @@ function ShoppingList() {
 	const [expandItems, setExpandItems] = useState([])
 	const [newItem, setNewItem] = useState('')
 	const [allCheck, setAllCheck] = useState(false)
-	
+
+	const [addItem, setAddItem] = useState(true)
+
 	const inputRef = useRef(null);
 
 	const defaultItemsList = {
-		id : items.length ? items[items.length - 1].id + 1 : 1,
-		checked : false,
+		id: items.length ? items[items.length - 1].id + 1 : 1,
+		checked: false,
 		quantity: 1,
 		price: 0,
 		description: ""
@@ -54,7 +56,7 @@ function ShoppingList() {
 	// User toggle all checkbox
 	const handleAllCheck = () => {
 		// toggle all checkboxes 
-		const listItems = items.map((item) => ({...item, checked : !allCheck}))
+		const listItems = items.map((item) => ({ ...item, checked: !allCheck }))
 		setAllCheck(!allCheck)
 		setItems(listItems)
 	}
@@ -81,7 +83,7 @@ function ShoppingList() {
 
 	// User add an item
 	const handleAdd = () => {
-		if (!newItem || !newItem.hasOwnProperty('name')){
+		if (!newItem || !newItem.hasOwnProperty('name')) {
 			// Set style to show error
 			document.getElementById('addFormItemName').style.border = "2px solid"
 			document.getElementById('addFormItemName').style.borderColor = "rgba(200, 70, 70, 0.7)"
@@ -107,31 +109,39 @@ function ShoppingList() {
 		setNewItem((newItem) => ({ ...newItem, [e.target.name]: e.target.value }))
 	}
 
+
 	return (
 		<div className='ml-5 mr-5 p-2 relative overflow-x-auto'>
-			
-			<div className='uppercase text-xl text-left font-bold text-gray-300/60 mt-4 mb-2 tracking-widest'>
+
+			<div className='flex uppercase text-xl text-left font-bold text-gray-300/60 mt-4 mb-2 tracking-widest'>
 				shopping list
+				<FaPlus
+					role='button'
+					size={20}
+					onClick={() => setAddItem(!addItem)}
+					className= {`m-1 hover:text-darkLamon hover:animate-bounce  ${addItem ? 'text-darkLamon/60': 'text-gray-500/60'} `}
+				/>
 			</div>
+			
 
 			{/* Items Table */}
 			<div className='relative overflow-x-auto shadow-lg rounded-lg  bg-darkPanel'>
 				<table className='w-full text-left table-fixed'>
 
 					{/* Table Head */}
-					<thead className='uppercase text-white/80 text-sm bg-gray-500/40'>
+					<thead className='uppercase text-white/80 text-sm bg-gray-500/40 '>
 						<tr>
 							<th scope="col" className="p-2 w-16">
 								<div className="flex items-center justify-center">
-									<input id="checkbox-all-search" checked={allCheck}  type="checkbox" className="w-4 h-4 rounded border-gray-700 rounded text-darkLamon/70 focus:ring-darkLamon/80" onChange={handleAllCheck}/>
+									<input id="checkbox-all-search" checked={allCheck} type="checkbox" className="w-4 h-4 rounded border-gray-700 rounded text-darkLamon/70 focus:ring-darkLamon/80" onChange={handleAllCheck} />
 									<label htmlFor="checkbox-all-search" className="sr-only">checkbox</label>
 								</div>
 							</th>
 							<th scope="col" className="md:w-1/3 lg:w-1/2"> Item </th>
-							<th className='w-12 md:w-28'> 
+							<th className='w-0 md:w-28'>
 								<span className="hidden md:inline-flex">
-									Quantity 
-								</span> 
+									Quantity
+								</span>
 							</th>
 							<th className="hidden lg:table-cell w-24">
 								<div className='flex items-center justify-centers'>
@@ -144,29 +154,32 @@ function ShoppingList() {
 							<th className='w-16 lg:w-24'>
 								<div className='flex items-center justify-centers'>
 									Total
-									<a href="#"><svg className="w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+									<a href="#"><svg className="hidden md:flex w-3 h-3 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
 										<path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
 									</svg></a>
 								</div>
 							</th>
 							<th className='w-20 md:w-28 text-center'>
-									Action
+								Action
 							</th>
 						</tr>
 					</thead>
 
 					{/* Table Body */}
 					<tbody>
-						<AddItem
-							newItem={newItem}
-							inputRef={inputRef}
-							handleReset={handleReset}
-							handleAdd={handleAdd}
-							handleAddFormChange={handleAddFormChange}
-						/>
+						{/* Add Item */}
+						{addItem ?
+							<AddItem
+								newItem={newItem}
+								inputRef={inputRef}
+								handleReset={handleReset}
+								handleAdd={handleAdd}
+								handleAddFormChange={handleAddFormChange}
+							/>
+						: null}
 						{items.map((item) => (
 							<tr key={item.id} className='hover:bg-gray-100/10 border-b border-white/10' >
-								
+
 								{/* Check */}
 								<td className='table-cell items-center justify-center p-2'>
 									<div className="flex items-center justify-center">
@@ -184,12 +197,21 @@ function ShoppingList() {
 									onClick={() => handleExpand(item.id)}
 									className='p-1 cursor-pointer truncate'
 								>
-									<span
-										style={(item.checked) ? { textDecoration: 'line-through' } : null}
-										className='text-lg font-bold tracking-widest'
-									>
-										{item.name}
-									</span>
+									<div className='flex items-center w-full'>
+										<span 
+											style={(item.checked) ? { textDecoration: 'line-through' } : null}
+											className='text-lg font-bold tracking-widest flex'
+										>
+											{item.name}
+										</span>
+									
+										{/* SM: Item Quantity */}
+										<p className='md:hidden ml-auto text-sm pr-2 tracking-tighter text-darkLamon/50'>
+											x {item.quantity}
+										</p>
+									</div>
+
+
 									{/* Expandable */}
 									{expandItems.includes(item.id) ?
 										<div className='text-white/60'>
@@ -214,7 +236,9 @@ function ShoppingList() {
 									onClick={() => handleExpand(item.id)}
 									className='cursor-pointer text-darkLamon/50'
 								>
-									x {item.quantity}
+									<span className='hidden md:flex'>
+										x {item.quantity}
+									</span>
 								</td>
 
 								{/* Item Price */}
@@ -258,7 +282,7 @@ function ShoppingList() {
 				</table>
 				{/* Total */}
 				<div className='flex font-semibold pl-4 pr-4 p-1 float-right text-white'>
-					Total: $ {totalPrice} 
+					Total: $ {totalPrice}
 				</div>
 			</div>
 		</div>
