@@ -12,9 +12,9 @@ function AddItem({ newItem, setNewItem, inputRef, handleReset, handleAdd, handle
 				{/* Check */}
 				<td className='w-4 p-4'>
 					<div className="flex items-center justify-center">
-						<input 
+						<input
 							className="w-4 h-4 ml-4 border-white/10 rounded bg-gray-500 text-darkLamon/70 focus:ring-darkLamon/80"
-							id="checkbox-item" 
+							id="checkbox-item"
 							type="checkbox"
 							name='checked'
 							checked={newItem.checked || false}
@@ -83,11 +83,11 @@ function AddItem({ newItem, setNewItem, inputRef, handleReset, handleAdd, handle
 						<div className='flex items-center justify-center border border-white/20 rounded-lg w-min-auto'>
 							<FaMinus size={15} type='button'
 								className='mr-2 ml-1 cursor-pointer hover:text-darkLamon'
-								onClick={ () => {
-									if (newItem.quantity > 1){
-										setNewItem(prevItem => ({...prevItem, quantity: prevItem.quantity - 1}))
+								onClick={() => {
+									if (newItem.quantity > 1) {
+										setNewItem(prevItem => ({ ...prevItem, quantity: prevItem.quantity - 1 }))
 									}
-								}} 
+								}}
 							/>
 							<input
 								type='number'
@@ -101,10 +101,10 @@ function AddItem({ newItem, setNewItem, inputRef, handleReset, handleAdd, handle
 								className='p-1 w-11/12 bg-black/20 border-0 w-1/3 text-center'
 							/>
 							<FaPlus size={15} type='button'
-								className='ml-2 mr-1 cursor-pointer hover:text-darkLamon'  
+								className='ml-2 mr-1 cursor-pointer hover:text-darkLamon'
 								onClick={() => {
-									if (newItem.quantity < 20){
-										setNewItem(prevItem => ({...prevItem, quantity: prevItem.quantity + 1}))
+									if (newItem.quantity < 20) {
+										setNewItem(prevItem => ({ ...prevItem, quantity: prevItem.quantity + 1 }))
 									}
 								}}
 							/>
@@ -144,8 +144,8 @@ function AddItem({ newItem, setNewItem, inputRef, handleReset, handleAdd, handle
 							<FaCheck className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce' type='button' onClick={handleAdd} size={20} />
 						</button>
 						<button className='focus:ring-white/10' onKeyDown={(e) => { if (e.key === "Enter") handleReset(); }}>
-							<GrPowerReset 
-								className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce ' 
+							<GrPowerReset
+								className='m-1 cursor-pointer hover:text-darkLamon hover:animate-bounce '
 								type='button' onClick={handleReset} size={20}
 							/>
 						</button>
