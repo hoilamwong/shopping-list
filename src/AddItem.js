@@ -8,7 +8,7 @@ function AddItem({ newItem, setNewItem, inputRef, handleReset, handleAdd, handle
 	return (
 		<>
 			{/* <tr className="hidden md:table-row hover:bg-white/5 border-b border-white/10" onKeyDown={ (e) => { if(e.key === "Enter") handleAdd();}}> */}
-			<tr className=" hover:bg-white/5 border-b border-white/10">
+			<tr className=" hover:bg-white/5 border-b border-zinc-600">
 				{/* Check */}
 				<td className='w-4 p-4'>
 					<div className="flex items-center justify-center">

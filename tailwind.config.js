@@ -4,20 +4,12 @@ const colors = require('tailwindcss/colors')
 module.exports = {
   content: ["./src/**/*.{html,js, jsx}"],
   theme: {
-    colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-      black: colors.black,
-      white: colors.white,
-      gray: colors.gray,
-      emerald: colors.emerald,
-      indigo: colors.indigo,
-      yellow: colors.yellow,
-      'darkLamon': '#ffc800',
-      'darkPanel': '#2a2930',
-      'yellowText': '#f2c40e'
-    },
     extend: {
+      colors: {
+        'darkLamon': '#ffc800',
+        'darkPanel': '#2a2930',
+        'yellowText': '#f2c40e'
+      },
       animation: {
         // 'hoverBounce': 'animation: hoverBounce 1s linear infinite',
       },

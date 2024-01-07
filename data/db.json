@@ -1,20 +1,36 @@
 {
   "shopping-list": [
     {
-      "id": 1,
-      "name": "one",
-      "checked": false,
-      "quantity": 1,
-      "price": 2.5,
-      "description": "no description"
-    },
-    {
       "id": 3,
       "name": "three",
       "checked": false,
       "quantity": 1,
       "price": 2.5,
       "description": "no description"
+    },
+    {
+      "id": 4,
+      "checked": false,
+      "quantity": 1,
+      "price": 0,
+      "description": "",
+      "name": "3"
+    },
+    {
+      "id": 5,
+      "checked": false,
+      "quantity": 1,
+      "price": 0,
+      "description": "",
+      "name": "23"
+    },
+    {
+      "id": 6,
+      "checked": false,
+      "quantity": 1,
+      "price": 0,
+      "description": "",
+      "name": "3"
     }
   ]
 }
