@@ -126,44 +126,45 @@ function ShoppingList() {
 	}
 
 	/* User toggle all checkbox */
+	// TODO: update apiRequest individually
 	const handleAllCheck = async () => {
 		// toggle all checkboxes 
 		const listItems = items.map((item) => ({ ...item, checked: !allCheck }))
 		setAllCheck(!allCheck)
 		setItems(listItems)
 
-		/* API POST request */
-		const url = 'http://localhost:3500/shopping-list'
-		console.log(listItems);
-		let updatedList = [
-			{
-				"id": 3,
-				"name": "FOURRRR",
-				"checked": true,
-				"quantity": 1,
-				"price": 2.5,
-				"description": "no description"
-			},
-		]
+		// /* API POST request */
+		// const url = 'http://localhost:3500/shopping-list'
+		// console.log(listItems);
+		// let updatedList = [
+		// 	{
+		// 		"id": 3,
+		// 		"name": "FOURRRR",
+		// 		"checked": true,
+		// 		"quantity": 1,
+		// 		"price": 2.5,
+		// 		"description": "no description"
+		// 	},
+		// ]
 
-		let updateOptions = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(listItems[0])
-		};
+		// let updateOptions = {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	body: JSON.stringify([listItems[0]])
+		// };
 
-		try {
-			const response = await fetch(API_URL, updateOptions);
-			if (!response.ok) {
-				throw new Error('Failed to update shopping list');
-			}
-			return await response.json();
-		} catch (error) {
-			console.error('Error updating shopping list:', error);
-			return null;
-		}
+		// try {
+		// 	const response = await fetch(API_URL, updateOptions);
+		// 	if (!response.ok) {
+		// 		throw new Error('Failed to update shopping list');
+		// 	}
+		// 	return await response.json();
+		// } catch (error) {
+		// 	console.error('Error updating shopping list:', error);
+		// 	return null;
+		// }
 
 		// const result = await apiRequest(url, updateOptions, fetchError)
 		// if (result) setFetchError(result + "failed updating toggle checks..")
