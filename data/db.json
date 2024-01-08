@@ -1,16 +1,8 @@
 {
   "shopping-list": [
     {
-      "id": 3,
-      "name": "three",
-      "checked": false,
-      "quantity": 1,
-      "price": 2.5,
-      "description": "no description"
-    },
-    {
       "id": 4,
-      "checked": false,
+      "checked": true,
       "quantity": 1,
       "price": 0,
       "description": "",

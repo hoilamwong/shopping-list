@@ -9,7 +9,7 @@ function ShoppingList() {
 	const API_URL = 'http://localhost:3500/shopping-list'
 	const [isLoading, setIsLoading] = useState(true)
 
-	const [items, setItems] = useState([])
+	const [items, setItems] = useState(JSON.parse(localStorage.getItem('shopping-list')))
 	const [expandItems, setExpandItems] = useState([])
 	const [newItem, setNewItem] = useState('')
 
@@ -29,6 +29,7 @@ function ShoppingList() {
 	}
 
 	const [fetchError, setFetchError] = useState(null)
+	const [connected, setConnected] = useState(true)
 
 	// Get Items from API 
 	useEffect(() => {
@@ -36,19 +37,20 @@ function ShoppingList() {
 			try {
 				// Get Response
 				const response = await fetch(API_URL)
-
 				if (!response.ok) throw Error('Did not receive expected data')
 
 				// convert to json after response
 				const listItems = await response.json()
 
-				setItems(listItems)
-				setFetchError(null)
+				if(!fetchError){
+					setItems(listItems)
+				}
 			} catch (err) {
 				setFetchError(err.message)
 			} finally {
 				// Set isLoading 
 				setIsLoading(false)
+				// setFetchError(null)
 			}
 		}
 
@@ -58,13 +60,13 @@ function ShoppingList() {
 			fetchItems()
 		}, 2000)
 
-
 	}, [])
 
 	/* Update allExpand if expandItems is changed */
 	useEffect(() => {
 		const newExpandItems = items.map((item) => item.id)
 		setAllExpand(expandItems.length === newExpandItems.length)
+
 	}, [expandItems, items])
 
 	/* Update items in localstorage and update all checkboxes
@@ -77,7 +79,7 @@ function ShoppingList() {
 		const allChecked = items.every(item => item.checked)
 		setAllCheck(allChecked)
 		setNewItem(defaultItemsList)
-	}, [, items])
+	}, [items])
 
 	/* Get Total Price of all items from list */
 	const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0)
@@ -104,11 +106,12 @@ function ShoppingList() {
 				:
 				item
 		)
+		setItems(listItems)
 
+		if(fetchError) return
 		/* API PATCH request */
 		// Get the updated item using id
 		const updatedItem = listItems.filter((item) => item.id === id)
-		console.log(updatedItem);
 		const updateOptions = {
 			method: 'PATCH',
 			headers: {
@@ -121,8 +124,6 @@ function ShoppingList() {
 		const reqUrl = `${API_URL}/${id}`
 		const result = await apiRequest(reqUrl, updateOptions, fetchError)
 		if (result) setFetchError(result)
-
-		setItems(listItems)
 	}
 
 	/* User toggle all checkbox */
@@ -133,41 +134,7 @@ function ShoppingList() {
 		setAllCheck(!allCheck)
 		setItems(listItems)
 
-		// /* API POST request */
-		// const url = 'http://localhost:3500/shopping-list'
-		// console.log(listItems);
-		// let updatedList = [
-		// 	{
-		// 		"id": 3,
-		// 		"name": "FOURRRR",
-		// 		"checked": true,
-		// 		"quantity": 1,
-		// 		"price": 2.5,
-		// 		"description": "no description"
-		// 	},
-		// ]
-
-		// let updateOptions = {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify([listItems[0]])
-		// };
-
-		// try {
-		// 	const response = await fetch(API_URL, updateOptions);
-		// 	if (!response.ok) {
-		// 		throw new Error('Failed to update shopping list');
-		// 	}
-		// 	return await response.json();
-		// } catch (error) {
-		// 	console.error('Error updating shopping list:', error);
-		// 	return null;
-		// }
-
-		// const result = await apiRequest(url, updateOptions, fetchError)
-		// if (result) setFetchError(result + "failed updating toggle checks..")
+		if(fetchError) return
 	}
 
 	/* User delete item */
@@ -179,6 +146,7 @@ function ShoppingList() {
 		const newExpandItems = expandItems.filter((foundId) => foundId !== id)
 		setExpandItems(newExpandItems)
 
+		if(fetchError) return
 		const deleteOptions = { method: 'DELETE' };
 		const reqUrl = `${API_URL}/${id}`
 		const result = await apiRequest(reqUrl, deleteOptions, fetchError)
@@ -480,7 +448,7 @@ function ShoppingList() {
 					<div className='basis-3/4 text-right  uppercase text-sm'>
 						{fetchError ?
 							<p className='text-red'>
-								{fetchError}
+								{fetchError}... using cookies 
 							</p> : null}
 						{/* Show Item info */}
 						{isLoading && <p className='flex float-right items-center text-md '> Loading<FaSpinner className='animate-spin mx-2' /> </p>}
