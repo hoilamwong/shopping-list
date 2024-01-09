@@ -10,7 +10,7 @@
     },
     {
       "id": 5,
-      "checked": false,
+      "checked": true,
       "quantity": 1,
       "price": 0,
       "description": "",
