@@ -4,23 +4,17 @@ import { IoIosArrowForward } from "react-icons/io";
 import AddItem from './AddItem';
 import apiRequest from './apiRequest';
 
+import api from './api/lists';
+
 function ShoppingList() {
-
+	const LIST_NAME = 'shopping-list'
 	const API_URL = 'http://localhost:3500/shopping-list'
+
 	const [isLoading, setIsLoading] = useState(true)
+	const [fetchError, setFetchError] = useState(null)
 
-	const [items, setItems] = useState(JSON.parse(localStorage.getItem('shopping-list')))
-	const [expandItems, setExpandItems] = useState([])
-	const [newItem, setNewItem] = useState('')
-
-	const [allCheck, setAllCheck] = useState(false)
-	const [allExpand, setAllExpand] = useState(false)
-
-	const [addItem, setAddItem] = useState(true)
-
-	const inputRef = useRef(null);
-
-	const defaultItemsList = {
+	const [items, setItems] = useState(JSON.parse(localStorage.getItem(LIST_NAME)))
+	const DEFAULT_ITEMS = {
 		id: items.length ? items[items.length - 1].id + 1 : 1,
 		checked: false,
 		quantity: 1,
@@ -28,10 +22,17 @@ function ShoppingList() {
 		description: ""
 	}
 
-	const [fetchError, setFetchError] = useState(null)
-	const [connected, setConnected] = useState(true)
+	const [allCheck, setAllCheck] = useState(false)
+	const [allExpand, setAllExpand] = useState(false)
 
-	// Get Items from API 
+	const [addItem, setAddItem] = useState(true)
+	const [newItem, setNewItem] = useState('')
+	const [expandItems, setExpandItems] = useState([])
+
+	const inputRef = useRef(null);
+
+	/* Get Items from API using fetch */
+	/*
 	useEffect(() => {
 		const fetchItems = async () => {
 			try {
@@ -61,7 +62,36 @@ function ShoppingList() {
 		}, 2000)
 
 	}, [])
+	*/
 
+	/* Get Items from API using axios */
+	useEffect(() => {
+		const fetchPosts = async () => {
+			try{
+				const response = await api.get(`/${LIST_NAME}`)
+				// response already returns json data
+				// response is already in 200 range (ok)
+				setItems(response.data)
+			}catch(err){
+				if (err.response) {
+					// Not in 200 response range
+					console.log(err.response.data);
+					console.log(err.response.structure);
+					setFetchError(err.response.structure)
+				} else {
+					// No response at all
+					console.log(err.message);
+					setFetchError(err.message)
+				}
+				setFetchError("fetch unsuccessful ): ")
+			}finally{
+				setIsLoading(false)
+			}
+		}
+
+		fetchPosts()
+	}, [])
+	
 	/* Update allExpand if expandItems is changed */
 	useEffect(() => {
 		const newExpandItems = items.map((item) => item.id)
@@ -78,7 +108,7 @@ function ShoppingList() {
 		// Check if all is checked
 		const allChecked = items.every(item => item.checked)
 		setAllCheck(allChecked)
-		setNewItem(defaultItemsList)
+		setNewItem(DEFAULT_ITEMS)
 	}, [items])
 
 	/* Get Total Price of all items from list */
@@ -91,7 +121,7 @@ function ShoppingList() {
 		inputRef.current.focus();
 
 		// Set New Item
-		setNewItem(defaultItemsList)
+		setNewItem(DEFAULT_ITEMS)
 	}
 
 	/* User toggle checkbox for an item */
@@ -112,18 +142,32 @@ function ShoppingList() {
 		/* API PATCH request */
 		// Get the updated item using id
 		const updatedItem = listItems.filter((item) => item.id === id)
-		const updateOptions = {
-			method: 'PATCH',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			// updatedItem returns an array of the object
-			body: JSON.stringify({ checked: updatedItem[0].checked })
+		
+		// const updateOptions = {
+		// 	method: 'PATCH',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	// updatedItem returns an array of the object
+		// 	body: JSON.stringify({ checked: updatedItem[0].checked })
+		// }
+		// // Specify API_URL with item id
+		// const reqUrl = `${API_URL}/${id}`
+		// const result = await apiRequest(reqUrl, updateOptions, fetchError)
+		// if (result) setFetchError(result)
+
+		try {
+			const response = await api.put(`/${LIST_NAME}/${id}`, updatedItem[0] )
+			setItems(items.map(
+				(item) => item.id === id ?
+					// { ...item, checked: !item.checked }
+					{ ...response.data }
+					:
+					item
+			))
+		} catch (err) {
+			console.log(err.message);
 		}
-		// Specify API_URL with item id
-		const reqUrl = `${API_URL}/${id}`
-		const result = await apiRequest(reqUrl, updateOptions, fetchError)
-		if (result) setFetchError(result)
 	}
 
 	/* User toggle all checkbox */
@@ -147,10 +191,19 @@ function ShoppingList() {
 		setExpandItems(newExpandItems)
 
 		if(fetchError) return
-		const deleteOptions = { method: 'DELETE' };
-		const reqUrl = `${API_URL}/${id}`
-		const result = await apiRequest(reqUrl, deleteOptions, fetchError)
-		if(result) setFetchError(result)
+
+		// Delete using http request
+		// const deleteOptions = { method: 'DELETE' };
+		// const reqUrl = `${API_URL}/${id}`
+		// const result = await apiRequest(reqUrl, deleteOptions, fetchError)
+		// if(result) setFetchError(result)
+
+		// Delete using axios
+		try{
+			await api.delete(`/${LIST_NAME}/${id}`)
+		}catch (err){
+			console.log(err.message);
+		}
 	}
 
 	/* User add an item */
@@ -169,8 +222,9 @@ function ShoppingList() {
 		const listItems = [...items, newItem]
 		setItems(listItems)
 
-		// POST to API
-		const postOptions = {
+		if(fetchError) return
+		// POST to API using
+		/*const postOptions = {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -179,8 +233,16 @@ function ShoppingList() {
 			body: JSON.stringify(newItem)
 		}
 		const result = await apiRequest(API_URL, postOptions, fetchError)
-		if (result) setFetchError(result)
+		if (result) setFetchError(result) */
 
+		// axios update
+		try {
+			const response = await api.post(`/${LIST_NAME}`, newItem)
+			const newListItems = [...items, response.data]
+			setItems(newListItems)
+		} catch (err) {
+			console.log(err.message);
+		}
 		setNewItem("")
 	}
 
@@ -189,7 +251,7 @@ function ShoppingList() {
 		const { name, value, type, checked } = e.target;
 		// set default value for newItem
 		if (!newItem) {
-			setNewItem(defaultItemsList)
+			setNewItem(DEFAULT_ITEMS)
 		}
 		setNewItem((prevItem) => ({
 			...prevItem,

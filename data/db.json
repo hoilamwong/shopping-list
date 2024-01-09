@@ -1,28 +1,28 @@
 {
   "shopping-list": [
     {
-      "id": 4,
+      "id": 1,
       "checked": true,
       "quantity": 1,
       "price": 0,
       "description": "",
-      "name": "3"
+      "name": "rice"
     },
     {
-      "id": 5,
-      "checked": true,
-      "quantity": 1,
-      "price": 0,
-      "description": "",
-      "name": "23"
-    },
-    {
-      "id": 6,
+      "id": 2,
       "checked": false,
       "quantity": 1,
       "price": 0,
       "description": "",
-      "name": "3"
+      "name": "milk"
+    },
+    {
+      "id": 3,
+      "checked": false,
+      "quantity": 1,
+      "price": 0,
+      "description": "",
+      "name": "23"
     }
   ]
 }
