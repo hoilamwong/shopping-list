@@ -1,0 +1,36 @@
+{
+  "shopping-list": [
+    {
+      "id": 1,
+      "checked": true,
+      "quantity": 1,
+      "price": 0,
+      "description": "",
+      "name": "rice"
+    },
+    {
+      "id": 2,
+      "checked": false,
+      "quantity": 1,
+      "price": 0,
+      "description": "",
+      "name": "milk"
+    },
+    {
+      "id": 5,
+      "checked": false,
+      "quantity": 1,
+      "price": 0,
+      "description": "",
+      "name": "sd"
+    },
+    {
+      "id": 6,
+      "checked": true,
+      "quantity": 1,
+      "price": 0,
+      "description": "",
+      "name": "sd2"
+    }
+  ]
+}

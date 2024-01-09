@@ -1,21 +1,20 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { FaTrash, FaPen, FaPlus } from "react-icons/fa";
+import { FaTrash, FaPen, FaPlus, FaSpinner } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import AddItem from './AddItem';
+import apiRequest from './apiRequest';
+
+import api from './api/lists';
 
 function ShoppingList() {
-	const [items, setItems] = useState(JSON.parse(localStorage.getItem('shopping-list')) || [])
-	const [expandItems, setExpandItems] = useState([])
-	const [newItem, setNewItem] = useState('')
+	const LIST_NAME = 'shopping-list'
+	const API_URL = 'http://localhost:3500/shopping-list'
 
-	const [allCheck, setAllCheck] = useState(false)
-	const [allExpand, setAllExpand] = useState(false)
+	const [isLoading, setIsLoading] = useState(true)
+	const [fetchError, setFetchError] = useState(null)
 
-	const [addItem, setAddItem] = useState(true)
-
-	const inputRef = useRef(null);
-
-	const defaultItemsList = {
+	const [items, setItems] = useState(JSON.parse(localStorage.getItem(LIST_NAME)) || [])
+	const DEFAULT_ITEMS = {
 		id: items.length ? items[items.length - 1].id + 1 : 1,
 		checked: false,
 		quantity: 1,
@@ -23,14 +22,85 @@ function ShoppingList() {
 		description: ""
 	}
 
-	// Update allExpand if expandItems is changed
+	const [allCheck, setAllCheck] = useState(false)
+	const [allExpand, setAllExpand] = useState(false)
+
+	const [addItem, setAddItem] = useState(true)
+	const [newItem, setNewItem] = useState('')
+	const [expandItems, setExpandItems] = useState([])
+
+	const inputRef = useRef(null);
+
+	/* Get Items from API using fetch */
+	/*
+	useEffect(() => {
+		const fetchItems = async () => {
+			try {
+				// Get Response
+				const response = await fetch(API_URL)
+				if (!response.ok) throw Error('Did not receive expected data')
+
+				// convert to json after response
+				const listItems = await response.json()
+
+				if(!fetchError){
+					setItems(listItems)
+				}
+			} catch (err) {
+				setFetchError(err.message)
+			} finally {
+				// Set isLoading 
+				setIsLoading(false)
+				// setFetchError(null)
+			}
+		}
+
+		// Simulate non-instant response
+		setTimeout(() => {
+			// fetchItems does not return anything so just call it simply
+			fetchItems()
+		}, 2000)
+
+	}, [])
+	*/
+
+	/* Get Items from API using axios */
+	useEffect(() => {
+		const fetchPosts = async () => {
+			try{
+				const response = await api.get(`/${LIST_NAME}`)
+				// response already returns json data
+				// response is already in 200 range (ok)
+				setItems(response.data)
+			}catch(err){
+				if (err.response) {
+					// Not in 200 response range
+					console.log(err.response.data);
+					console.log(err.response.structure);
+					setFetchError(err.response.structure)
+				} else {
+					// No response at all
+					console.log(err.message);
+					setFetchError(err.message)
+				}
+				setFetchError("fetch unsuccessful ): ")
+			}finally{
+				setIsLoading(false)
+			}
+		}
+
+		fetchPosts()
+	}, [])
+	
+	/* Update allExpand if expandItems is changed */
 	useEffect(() => {
 		const newExpandItems = items.map((item) => item.id)
 		setAllExpand(expandItems.length === newExpandItems.length)
+
 	}, [expandItems, items])
 
-	// Update items in localstorage and update all checkboxes
-	// Whenever an item is changed / added
+	/* Update items in localstorage and update all checkboxes
+		 Whenever an item is changed / added */
 	useEffect(() => {
 		// Update localstorage whenever items is changed
 		localStorage.setItem('shopping-list', JSON.stringify(items))
@@ -38,42 +108,159 @@ function ShoppingList() {
 		// Check if all is checked
 		const allChecked = items.every(item => item.checked)
 		setAllCheck(allChecked)
-		setNewItem(defaultItemsList)
-	}, [, items])
+		setNewItem(DEFAULT_ITEMS)
+	}, [items])
 
-	// Get Total Price of all items from list
+	/* Get Total Price of all items from list */
 	const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0)
 
-	// User reset form
+	/* User reset form */
 	const handleReset = () => {
 		//Reset Style
 		document.getElementById('addFormItemName').style.border = "none"
 		inputRef.current.focus();
 
 		// Set New Item
-		setNewItem(defaultItemsList)
+		setNewItem(DEFAULT_ITEMS)
 	}
 
-	// User toggle checkbox for an item
-	const handleCheck = (e, id) => {
+	/* User toggle checkbox for an item */
+	const handleCheck = async (e, id) => {
 		e.stopPropagation()
 
 		// Check each item in items
 		// if id is matched, reverse the checked on that item, else return original item
-		const listItems = items.map((item) => item.id === id ?
-			{ ...item, checked: !item.checked } : item)
+		const listItems = items.map(
+			(item) => item.id === id ?
+				{ ...item, checked: !item.checked }
+				:
+				item
+		)
 		setItems(listItems)
+
+		if(fetchError) return
+		/* API PATCH request */
+		// Get the updated item using id
+		const updatedItem = listItems.filter((item) => item.id === id)
+
+		// const updateOptions = {
+		// 	method: 'PATCH',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	// updatedItem returns an array of the object
+		// 	body: JSON.stringify({ checked: updatedItem[0].checked })
+		// }
+		// // Specify API_URL with item id
+		// const reqUrl = `${API_URL}/${id}`
+		// const result = await apiRequest(reqUrl, updateOptions, fetchError)
+		// if (result) setFetchError(result)
+
+		try {
+			const response = await api.put(`/${LIST_NAME}/${id}`, updatedItem[0] )
+			setItems(items.map(
+				(item) => item.id === id ?
+					// { ...item, checked: !item.checked }
+					{ ...response.data }
+					:
+					item
+			))
+		} catch (err) {
+			console.log(err.message);
+		}
 	}
 
-	// User toggle all checkbox
-	const handleAllCheck = () => {
+	/* User toggle all checkbox */
+	// TODO: update apiRequest individually
+	const handleAllCheck = async () => {
 		// toggle all checkboxes 
 		const listItems = items.map((item) => ({ ...item, checked: !allCheck }))
 		setAllCheck(!allCheck)
 		setItems(listItems)
+
+		if(fetchError) return
 	}
 
-	// User toggle details of an item
+	/* User delete item */
+	const handleDelete = async (id) => {
+		const listItems = items.filter((item) => item.id !== id)
+		setItems(listItems)
+
+		// delete from expand items
+		const newExpandItems = expandItems.filter((foundId) => foundId !== id)
+		setExpandItems(newExpandItems)
+
+		if(fetchError) return
+
+		// Delete using http request
+		// const deleteOptions = { method: 'DELETE' };
+		// const reqUrl = `${API_URL}/${id}`
+		// const result = await apiRequest(reqUrl, deleteOptions, fetchError)
+		// if(result) setFetchError(result)
+
+		// Delete using axios
+		try{
+			await api.delete(`/${LIST_NAME}/${id}`)
+		}catch (err){
+			console.log(err.message);
+		}
+	}
+
+	/* User add an item */
+	const handleAdd = async () => {
+		if (!newItem || !newItem.hasOwnProperty('name')) {
+			// Set style to show error
+			document.getElementById('addFormItemName').style.border = "2px solid"
+			document.getElementById('addFormItemName').style.borderColor = "rgba(200, 70, 70, 0.7)"
+			return
+		}
+
+		// Reset Style
+		document.getElementById('addFormItemName').style.border = "none"
+		inputRef.current.focus();
+
+		const listItems = [...items, newItem]
+		setItems(listItems)
+
+		if(fetchError) return
+		// POST to API using
+		/*const postOptions = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			// only needs to send new item for POST
+			body: JSON.stringify(newItem)
+		}
+		const result = await apiRequest(API_URL, postOptions, fetchError)
+		if (result) setFetchError(result) */
+
+		// axios update
+		try {
+			const response = await api.post(`/${LIST_NAME}`, newItem)
+			const newListItems = [...items, response.data]
+			setItems(newListItems)
+		} catch (err) {
+			console.log(err.message);
+		}
+		setNewItem("")
+	}
+
+	/* User is adding an item */
+	const handleAddFormChange = (e) => {
+		const { name, value, type, checked } = e.target;
+		// set default value for newItem
+		if (!newItem) {
+			setNewItem(DEFAULT_ITEMS)
+		}
+		setNewItem((prevItem) => ({
+			...prevItem,
+			// Set the value for [name]
+			[name]: type === 'checkbox' ? checked : value
+		}))
+	}
+
+	/* User toggle details of an item */
 	// TODO: not set in local storage
 	const handleExpand = (id) => {
 		// copy items using Spread operator !
@@ -88,7 +275,7 @@ function ShoppingList() {
 		// e.stopImmediatePropagation();
 	}
 
-	// Toggle expand
+	/* Toggle expand */
 	const toggleExpand = () => {
 		if (!allExpand) {
 			const newExpandItems = items.map((item) => item.id)
@@ -98,50 +285,6 @@ function ShoppingList() {
 		}
 		setAllExpand(!allExpand)
 	}
-
-	// User delete item
-	const handleDelete = (id) => {
-		const listItems = items.filter((item) => item.id !== id)
-		setItems(listItems)
-
-		// delete from expand items
-		const newExpandItems = expandItems.filter((foundId) => foundId !== id)
-		setExpandItems(newExpandItems)
-	}
-
-	// User add an item
-	const handleAdd = () => {
-		if (!newItem || !newItem.hasOwnProperty('name')) {
-			// Set style to show error
-			document.getElementById('addFormItemName').style.border = "2px solid"
-			document.getElementById('addFormItemName').style.borderColor = "rgba(200, 70, 70, 0.7)"
-			return
-		}
-
-		// Reset Style
-		document.getElementById('addFormItemName').style.border = "none"
-
-		const listItems = [...items, newItem]
-		setItems(listItems)
-		setNewItem("")
-
-		inputRef.current.focus();
-	}
-
-	// User is adding an item
-	const handleAddFormChange = (e) => {
-		const { name, value, type, checked } = e.target;
-		// set default value for newItem
-		if (!newItem) {
-			setNewItem(defaultItemsList)
-		}
-		setNewItem((prevItem) => ({
-			...prevItem,
-			// Set the value for [name]
-			[name]: type === 'checkbox' ? checked : value
-		}))
-	}
-
 
 	return (
 		<div className='ml-5 mr-5 p-2 relative overflow-x-auto'>
@@ -232,6 +375,7 @@ function ShoppingList() {
 
 					{/* Table Body */}
 					<tbody>
+
 						{/* Add Item */}
 						{addItem ?
 							<AddItem
@@ -247,7 +391,7 @@ function ShoppingList() {
 						{items.map((item) => (
 							<tr
 								key={item.id}
-								className='hover:bg-gray-100/10 hover:cursor-pointer border-b border-white/10'
+								className='hover:bg-gray-100/10 hover:cursor-pointer border-b border-zinc-600'
 								onClick={() => handleExpand(item.id)}
 							>
 								{/* Check */}
@@ -356,9 +500,22 @@ function ShoppingList() {
 						))}
 					</tbody>
 				</table>
+
 				{/* Total */}
-				<div className='flex font-semibold pl-4 pr-4 p-1 float-right text-white/95'>
-					Total: $ {totalPrice}
+				<div className='flex flex-row p-1 px-4 items-center font-semibold text-gray-300/50'>
+					<div className='basis-1/4 text-white/95 text-left inset-y-0 '>
+						Total: $ {totalPrice}
+					</div>
+					{/* Show Error Message*/}
+					<div className='basis-3/4 text-right  uppercase text-sm'>
+						{fetchError ?
+							<p className='text-red'>
+								{fetchError}... using cookies 
+							</p> : null}
+						{/* Show Item info */}
+						{isLoading && <p className='flex float-right items-center text-md '> Loading<FaSpinner className='animate-spin mx-2' /> </p>}
+						{(!items.length && !isLoading) && <p> No Item yet </p>}
+					</div>
 				</div>
 			</div>
 		</div>

@@ -1,16 +1,18 @@
-// import logo from './logo.svg';
-// import './output.css';
 import ShoppingList from './ShoppingList';
+import Layout from './Layout';
+import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Login from './Login';
+import About from './About';
+
 
 function App() {
-
   return (
-    <div className="App divide-y divide-darkLamon/50 select-none" >
-      <div className='font-bold text-left mt-4 p-5 pb-1 text-lg text-darkLamon tracking-wide '>
-        Lamon.io
-      </div>
-      <ShoppingList/>
-    </div>
+    <Routes>
+      <Route path='/' element={<ShoppingList/>} />
+      <Route path='/about' element={<About/>} />
+    </Routes>
+    // <ShoppingList/>
   );
 }
 
