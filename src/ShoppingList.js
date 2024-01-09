@@ -2,9 +2,11 @@ import React, { useEffect, useState, useRef } from 'react'
 import { FaTrash, FaPen, FaPlus, FaSpinner } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import AddItem from './AddItem';
-import apiRequest from './apiRequest';
+import Header from './Header';
 
+import apiRequest from './apiRequest';
 import api from './api/lists';
+import Footer from './Footer';
 
 function ShoppingList() {
 	const LIST_NAME = 'shopping-list'
@@ -287,7 +289,8 @@ function ShoppingList() {
 	}
 
 	return (
-		<div className='ml-5 mr-5 p-2 relative overflow-x-auto'>
+		<div className='ml-5 mr-5 p-2 relative overflow-x-auto h-screen select-none'>
+      <Header />
 
 			<div className='flex uppercase text-xl text-left font-bold text-gray-200 mt-4 mb-2 tracking-widest items-center'>
 				<span className='select-text'>shopping list</span>
@@ -309,7 +312,6 @@ function ShoppingList() {
 					/>
 				</div>
 			</div>
-
 
 			{/* Items Table */}
 			<div className='relative overflow-x-auto shadow-lg rounded-lg  bg-darkPanel'>
@@ -518,6 +520,8 @@ function ShoppingList() {
 					</div>
 				</div>
 			</div>
+
+			<Footer />
 		</div>
 	)
 }

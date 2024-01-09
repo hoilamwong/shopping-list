@@ -20,8 +20,8 @@ root.render(
   //   <RouterProvider router={router} />
   // </React.StrictMode>
   <BrowserRouter>
-  <Link to="/">Home</Link>
-  <Link to="/about">About</Link>
+  {/* <Link to="/">Home</Link>
+  <Link to="/about">About</Link> */}
     <App />
   </BrowserRouter>
 );
