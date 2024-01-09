@@ -17,12 +17,20 @@
       "name": "milk"
     },
     {
-      "id": 3,
+      "id": 5,
       "checked": false,
       "quantity": 1,
       "price": 0,
       "description": "",
-      "name": "23"
+      "name": "sd"
+    },
+    {
+      "id": 6,
+      "checked": true,
+      "quantity": 1,
+      "price": 0,
+      "description": "",
+      "name": "sd2"
     }
   ]
 }

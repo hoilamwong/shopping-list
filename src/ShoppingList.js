@@ -13,7 +13,7 @@ function ShoppingList() {
 	const [isLoading, setIsLoading] = useState(true)
 	const [fetchError, setFetchError] = useState(null)
 
-	const [items, setItems] = useState(JSON.parse(localStorage.getItem(LIST_NAME)))
+	const [items, setItems] = useState(JSON.parse(localStorage.getItem(LIST_NAME)) || [])
 	const DEFAULT_ITEMS = {
 		id: items.length ? items[items.length - 1].id + 1 : 1,
 		checked: false,
@@ -142,7 +142,7 @@ function ShoppingList() {
 		/* API PATCH request */
 		// Get the updated item using id
 		const updatedItem = listItems.filter((item) => item.id === id)
-		
+
 		// const updateOptions = {
 		// 	method: 'PATCH',
 		// 	headers: {
