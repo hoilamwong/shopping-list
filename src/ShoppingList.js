@@ -8,7 +8,7 @@ import api from './api/lists';
 
 function ShoppingList() {
 	const LIST_NAME = 'shopping-list'
-	const API_URL = 'http://localhost:3500/shopping-list'
+	// const API_URL = 'http://localhost:3500/shopping-list'
 
 	const [isLoading, setIsLoading] = useState(true)
 	const [fetchError, setFetchError] = useState(null)
